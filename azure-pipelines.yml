@@ -12,18 +12,20 @@ variables:
 pool:
   vmImage: 'ubuntu-latest'
 
-steps:
-- script: |
-    export ARM_CLIENT_ID='$(Azure.ClientId)'
-    export ARM_CLIENT_SECRET='$(Azure.ClientSecret)'
-    export ARM_SUBSCRIPTION_ID='$(Azure.SubscriptionId)'
-    export ARM_TENANT_ID='$(Azure.TenantId)'
-  displayName: Set environment variables
-
-- script: terraform init
-  workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform'
-  displayName: 'Initialize Terraform'
-
-- script: terraform apply -auto-approve
-  workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform'
-  displayName: 'Apply Terraform'
+jobs:
+  - job: ApplyTerraform
+    displayName: Apply Terraform
+    variables:
+      ARM_CLIENT_ID: '$(Azure.ClientId)'
+      ARM_CLIENT_SECRET: '$(Azure.ClientSecret)'
+      ARM_SUBSCRIPTION_ID: '$(Azure.SubscriptionId)'
+      ARM_TENANT_ID: '$(Azure.TenantId)'
+    steps:
+    - script: terraform init
+      workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform'
+      displayName: 'Initialize Terraform'
+    
+    - script: terraform apply -auto-approve
+      workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform'
+      displayName: 'Apply Terraform'
+    
