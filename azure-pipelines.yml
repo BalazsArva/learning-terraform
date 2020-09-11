@@ -13,23 +13,23 @@ pool:
   vmImage: 'ubuntu-latest'
 
 jobs:
-  - job: ApplyTerraform
-    displayName: Apply Terraform
-    variables:
+- job: ApplyTerraform
+  displayName: Apply Terraform
+  steps:
+  - script: terraform init
+    workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform'
+    displayName: 'Initialize Terraform'
+    env:
       ARM_CLIENT_ID: '$(Azure.ClientId)'
       ARM_CLIENT_SECRET: '$(Azure.ClientSecret)'
       ARM_SUBSCRIPTION_ID: '$(Azure.SubscriptionId)'
       ARM_TENANT_ID: '$(Azure.TenantId)'
-    steps:
-    - script: echo '$(Azure.ClientId)'
-      workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform'
-      displayName: 'Debug: show client id'
-
-    - script: terraform init
-      workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform'
-      displayName: 'Initialize Terraform'
-    
-    - script: terraform apply -auto-approve
-      workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform'
-      displayName: 'Apply Terraform'
-    
+  
+  - script: terraform apply -auto-approve
+    workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform'
+    displayName: 'Apply Terraform'
+    env:
+      ARM_CLIENT_ID: '$(Azure.ClientId)'
+      ARM_CLIENT_SECRET: '$(Azure.ClientSecret)'
+      ARM_SUBSCRIPTION_ID: '$(Azure.SubscriptionId)'
+      ARM_TENANT_ID: '$(Azure.TenantId)'
