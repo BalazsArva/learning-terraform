@@ -17,10 +17,11 @@ jobs:
   displayName: Apply Terraform
   steps:
   - script: |
-      wget https://releases.hashicorp.com/terraform/0.13.2/terraform_0.13.2_linux_amd64.zip /usr/local/bin/
+      wget https://releases.hashicorp.com/terraform/0.13.2/terraform_0.13.2_linux_amd64.zip
       unzip /usr/local/bin/terraform_0.13.2_linux_amd64.zip /usr/local/bin/
       rm /usr/local/bin/terraform_0.13.2_linux_amd64.zip
     displayName: Download & install Terraform v0.13.2
+    workingDirectory: /usr/local/bin/
 
   - script: terraform init
     workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform'
