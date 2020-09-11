@@ -6,10 +6,24 @@
 trigger:
 - master
 
+variables:
+  - group: AzureCredentials
+
 pool:
   vmImage: 'ubuntu-latest'
 
 steps:
+- script: |
+    export ARM_CLIENT_ID='$(Azure.ClientId)'
+    export ARM_CLIENT_SECRET='$(Azure.ClientSecret)'
+    export ARM_SUBSCRIPTION_ID='$(Azure.SubscriptionId)'
+    export ARM_TENANT_ID='$(Azure.TenantId)'
+  displayName: Set environment variables
+
+- script: terraform init
+  workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform'
+  displayName: 'Initialize Terraform'
+
 - script: terraform apply -auto-approve
   workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform'
   displayName: 'Apply Terraform'
