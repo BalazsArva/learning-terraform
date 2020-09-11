@@ -11,5 +11,5 @@ pool:
 
 steps:
 - script: terraform apply -auto-approve
-  workingDirectory: /Terraform
+  workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform'
   displayName: 'Apply Terraform'
