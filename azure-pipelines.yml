@@ -4,8 +4,8 @@
 # https://aka.ms/yaml
 
 trigger:
-- master
-
+  - master
+  
 variables:
   - group: AzureCredentials
 
@@ -17,21 +17,12 @@ jobs:
   displayName: Apply Terraform
   steps:
   - script: |
-      ls /home/linuxbrew/.linuxbrew/bin
-      ls /home/linuxbrew/.linuxbrew/sbin
-      ls /usr/share/rust/.cargo/bin
-      ls /home/runner/.config/composer/vendor/bin
-      ls /home/runner/.dotnet/tools
-      ls /snap/bin
-      ls /usr/local/sbin
-      ls /usr/local/bin
-      ls /usr/sbin
-      ls /usr/bin
-      ls /sbin
-      ls /bin
-      ls /usr/games
-      ls /usr/local/games
-      ls /snap/bin
+      mkdir terraform-download
+      cd terraform-download
+      wget https://releases.hashicorp.com/terraform/0.13.2/terraform_0.13.2_linux_amd64.zip
+      unzip terraform_0.13.2_linux_amd64.zip
+      rm /snap/bin/terraform
+      cp terraform /snap/bin/terraform
     displayName: Download & install Terraform v0.13.2
 
   - script: terraform init
