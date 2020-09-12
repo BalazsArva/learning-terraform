@@ -1,8 +1,3 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
   - master
   
@@ -16,17 +11,9 @@ jobs:
 - job: ApplyTerraform
   displayName: Apply Terraform
   steps:
-  - script: |
-      mkdir terraform-download
-      cd terraform-download
-      wget https://releases.hashicorp.com/terraform/0.13.2/terraform_0.13.2_linux_amd64.zip
-      unzip terraform_0.13.2_linux_amd64.zip
-      terraform -v
-    displayName: Download & install Terraform v0.13.2
-
   - script: terraform init
     workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform'
-    displayName: 'Initialize Terraform'
+    displayName: 'Terraform - Initialize'
     env:
       ARM_CLIENT_ID: '$(Azure.ClientId)'
       ARM_CLIENT_SECRET: '$(Azure.ClientSecret)'
@@ -35,7 +22,7 @@ jobs:
   
   - script: terraform apply -auto-approve
     workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform'
-    displayName: 'Apply Terraform'
+    displayName: 'Terraform - Apply'
     env:
       ARM_CLIENT_ID: '$(Azure.ClientId)'
       ARM_CLIENT_SECRET: '$(Azure.ClientSecret)'
