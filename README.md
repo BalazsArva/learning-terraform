@@ -35,3 +35,5 @@
   * [ ] Run post-deployment integration tests (if nonprod; rollback & restore DB on failure)
 
     * be able to force/simulate failure to test rollback
+
+* Destroy everything (for Azure cost saving purposes)
