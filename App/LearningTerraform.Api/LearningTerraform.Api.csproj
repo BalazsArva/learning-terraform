@@ -14,5 +14,10 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LearningTerraform.BusinessLogic\LearningTerraform.BusinessLogic.csproj" />
+    <ProjectReference Include="..\LearningTerraform.DataAccess.MsSql\LearningTerraform.DataAccess.MsSql.csproj" />
+  </ItemGroup>
+
 
 </Project>
