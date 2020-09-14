@@ -1,5 +1,7 @@
+using LearningTerraform.DataAccess.MsSql.Database;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -18,6 +20,12 @@ namespace LearningTerraform.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services
+                .AddDbContext<DataContext>(
+                    opts => opts.UseSqlServer(Configuration.GetConnectionString("Default")),
+                    ServiceLifetime.Transient,
+                    ServiceLifetime.Singleton);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
