@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using LearningTerraform.BusinessLogic.DataAccess.Abstract;
 
-namespace LearningTerraform.DataAccess.MsSql.DataAccess
+namespace LearningTerraform.DataAccess.MsSql.Database
 {
     public class UnitOfWork : IUnitOfWork
     {

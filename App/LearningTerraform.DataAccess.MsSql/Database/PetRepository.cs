@@ -4,7 +4,7 @@ using LearningTerraform.BusinessLogic.DataAccess.Abstract;
 using LearningTerraform.BusinessLogic.Domain;
 using Microsoft.EntityFrameworkCore;
 
-namespace LearningTerraform.DataAccess.MsSql.DataAccess
+namespace LearningTerraform.DataAccess.MsSql.Database
 {
     public class PetRepository : IPetReadRepository, IPetWriteRepository
     {

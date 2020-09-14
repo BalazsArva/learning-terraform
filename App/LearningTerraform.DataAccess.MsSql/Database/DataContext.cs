@@ -1,7 +1,7 @@
 using LearningTerraform.DataAccess.MsSql.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace LearningTerraform.DataAccess.MsSql.DataAccess
+namespace LearningTerraform.DataAccess.MsSql.Database
 {
     public class DataContext : DbContext
     {

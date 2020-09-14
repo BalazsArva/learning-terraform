@@ -1,7 +1,7 @@
 using System;
 using LearningTerraform.BusinessLogic.DataAccess.Abstract;
 
-namespace LearningTerraform.DataAccess.MsSql.DataAccess
+namespace LearningTerraform.DataAccess.MsSql.Database
 {
     public class UnitOfWorkFactory : IUnitOfWorkFactory
     {
