@@ -33,7 +33,7 @@ namespace LearningTerraform.DataAccess.MsSql.Database
 
         public async Task<Pet> GetByIdAsync(string id)
         {
-            var entity = await context.Pets.FindAsync(id);
+            var entity = await context.Pets.FirstOrDefaultAsync(x => x.PublicId == id);
 
             if (entity is null)
             {
