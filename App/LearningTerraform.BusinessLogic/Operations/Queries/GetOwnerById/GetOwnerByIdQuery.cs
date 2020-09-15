@@ -1,4 +1,4 @@
-namespace LearningTerraform.BusinessLogic.Queries.GetOwnerById
+namespace LearningTerraform.BusinessLogic.Operations.Queries.GetOwnerById
 {
     public class GetOwnerByIdQuery
     {

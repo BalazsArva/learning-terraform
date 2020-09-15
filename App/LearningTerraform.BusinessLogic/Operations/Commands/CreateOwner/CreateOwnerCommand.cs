@@ -1,4 +1,4 @@
-namespace LearningTerraform.BusinessLogic.Commands.CreateOwner
+namespace LearningTerraform.BusinessLogic.Operations.Commands.CreateOwner
 {
     public class CreateOwnerCommand
     {

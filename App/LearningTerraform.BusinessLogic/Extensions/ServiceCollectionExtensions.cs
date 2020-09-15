@@ -1,5 +1,5 @@
-using LearningTerraform.BusinessLogic.Commands.CreateOwner;
-using LearningTerraform.BusinessLogic.Queries.GetOwnerById;
+using LearningTerraform.BusinessLogic.Operations.Commands.CreateOwner;
+using LearningTerraform.BusinessLogic.Operations.Queries.GetOwnerById;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace LearningTerraform.BusinessLogic.Extensions

@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using LearningTerraform.BusinessLogic.DataAccess.Abstract;
 using LearningTerraform.BusinessLogic.Domain;
 
-namespace LearningTerraform.BusinessLogic.Queries.GetOwnerById
+namespace LearningTerraform.BusinessLogic.Operations.Queries.GetOwnerById
 {
     public class GetOwnerByIdQueryHandler : IGetOwnerByIdQueryHandler
     {

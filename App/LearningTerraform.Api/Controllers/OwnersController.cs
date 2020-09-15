@@ -2,8 +2,8 @@ using System;
 using System.Threading.Tasks;
 using LearningTerraform.Api.Contracts.Requests;
 using LearningTerraform.Api.Contracts.Responses;
-using LearningTerraform.BusinessLogic.Commands.CreateOwner;
-using LearningTerraform.BusinessLogic.Queries.GetOwnerById;
+using LearningTerraform.BusinessLogic.Operations.Commands.CreateOwner;
+using LearningTerraform.BusinessLogic.Operations.Queries.GetOwnerById;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

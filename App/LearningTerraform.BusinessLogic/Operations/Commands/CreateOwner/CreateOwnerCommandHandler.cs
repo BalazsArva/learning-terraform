@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using LearningTerraform.BusinessLogic.DataAccess.Abstract;
 
-namespace LearningTerraform.BusinessLogic.Commands.CreateOwner
+namespace LearningTerraform.BusinessLogic.Operations.Commands.CreateOwner
 {
     public class CreateOwnerCommandHandler : ICreateOwnerCommandHandler
     {
