@@ -1,5 +1,5 @@
 using System;
-using LearningTerraform.BusinessLogic.DataAccess.Abstract;
+using LearningTerraform.BusinessLogic.DataAccess.Abstractions;
 using LearningTerraform.DataAccess.MsSql.Database;
 using Microsoft.Extensions.DependencyInjection;
 

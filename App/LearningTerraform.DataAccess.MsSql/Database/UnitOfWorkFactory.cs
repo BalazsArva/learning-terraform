@@ -1,5 +1,5 @@
 using System;
-using LearningTerraform.BusinessLogic.DataAccess.Abstract;
+using LearningTerraform.BusinessLogic.DataAccess.Abstractions;
 
 namespace LearningTerraform.DataAccess.MsSql.Database
 {

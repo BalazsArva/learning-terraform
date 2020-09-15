@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using LearningTerraform.BusinessLogic.DataAccess.Abstract;
+using LearningTerraform.BusinessLogic.DataAccess.Abstractions;
 using LearningTerraform.BusinessLogic.Domain;
 
 namespace LearningTerraform.BusinessLogic.Operations.Queries.GetOwnerById

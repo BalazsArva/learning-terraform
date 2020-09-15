@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using LearningTerraform.BusinessLogic.DataAccess.Abstract;
+using LearningTerraform.BusinessLogic.DataAccess.Abstractions;
 using LearningTerraform.BusinessLogic.Domain;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +17,7 @@ namespace LearningTerraform.DataAccess.MsSql.Database
 
         public async Task<string> CreateAsync(string ownerId, Pet pet)
         {
-            var ownerEntity = await context.Owners.FirstOrDefaultAsync(x => x.PublicId == ownerId);
+            var ownerEntity = await context.Owners.AsNoTracking().FirstOrDefaultAsync(x => x.PublicId == ownerId);
 
             var petEntity = new Entities.Pet
             {
@@ -33,7 +33,7 @@ namespace LearningTerraform.DataAccess.MsSql.Database
 
         public async Task<Pet> GetByIdAsync(string id)
         {
-            var entity = await context.Pets.FirstOrDefaultAsync(x => x.PublicId == id);
+            var entity = await context.Pets.AsNoTracking().FirstOrDefaultAsync(x => x.PublicId == id);
 
             if (entity is null)
             {

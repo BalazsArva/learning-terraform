@@ -1,4 +1,4 @@
-﻿namespace LearningTerraform.BusinessLogic.DataAccess.Abstract
+﻿namespace LearningTerraform.BusinessLogic.DataAccess.Abstractions
 {
     public interface IUnitOfWorkFactory
     {

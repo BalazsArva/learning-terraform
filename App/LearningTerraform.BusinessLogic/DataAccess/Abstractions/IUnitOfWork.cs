@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace LearningTerraform.BusinessLogic.DataAccess.Abstract
+namespace LearningTerraform.BusinessLogic.DataAccess.Abstractions
 {
     public interface IUnitOfWork : IDisposable
     {

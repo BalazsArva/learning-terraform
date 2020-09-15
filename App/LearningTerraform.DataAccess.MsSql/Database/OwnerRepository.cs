@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using LearningTerraform.BusinessLogic.DataAccess.Abstract;
+using LearningTerraform.BusinessLogic.DataAccess.Abstractions;
 using LearningTerraform.BusinessLogic.Domain;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,7 +32,7 @@ namespace LearningTerraform.DataAccess.MsSql.Database
 
         public async Task<Owner> GetByIdAsync(string id)
         {
-            var entity = await context.Owners.FirstOrDefaultAsync(x => x.PublicId == id);
+            var entity = await context.Owners.AsNoTracking().FirstOrDefaultAsync(x => x.PublicId == id);
 
             if (entity is null)
             {
@@ -41,6 +41,7 @@ namespace LearningTerraform.DataAccess.MsSql.Database
 
             var petEntities = await context
                 .Pets
+                .AsNoTracking()
                 .Where(x => x.OwnerId == entity.Id)
                 .ToListAsync();
 

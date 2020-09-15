@@ -2,7 +2,7 @@
 
 # Future plans
 
-* [ ] A sample, dockerized ASP.NET Core application which uses MS SQL, EF and DB migrations
+* [&check;] A sample, dockerized ASP.NET Core application which uses MS SQL, EF and DB migrations
 * [ ] Tests for the application:
 
   * [ ] __Unit tests__
@@ -36,4 +36,4 @@
 
     * be able to force/simulate failure to test rollback
 
-* Destroy everything (for Azure cost saving purposes)
+* [ ] Destroy everything (for Azure cost saving purposes)

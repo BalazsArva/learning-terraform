@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using LearningTerraform.BusinessLogic.Domain;
 
-namespace LearningTerraform.BusinessLogic.DataAccess.Abstract
+namespace LearningTerraform.BusinessLogic.DataAccess.Abstractions
 {
     public interface IOwnerWriteRepository
     {
