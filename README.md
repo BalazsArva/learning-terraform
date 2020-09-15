@@ -2,7 +2,7 @@
 
 # Future plans
 
-* [&check;] A sample, dockerized ASP.NET Core application which uses MS SQL, EF and DB migrations
+* [x] A sample, dockerized ASP.NET Core application which uses MS SQL, EF and DB migrations
 * [ ] Tests for the application:
 
   * [ ] __Unit tests__
