@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using LearningTerraform.Api.Contracts.Requests;
 using LearningTerraform.Api.Contracts.Responses;
@@ -57,12 +58,20 @@ namespace LearningTerraform.Api.Controllers
                 return NotFound();
             }
 
-            return Ok(new OwnerResponse
+            var response = new OwnerResponse
             {
                 Id = owner.Id,
                 FirstName = owner.FirstName,
                 LastName = owner.LastName,
-            });
+            };
+
+            response.Pets.AddRange(owner.Pets.Select(x => new PetResponse
+            {
+                Id = x.Id,
+                Name = x.Name,
+            }));
+
+            return Ok(response);
         }
     }
 }
