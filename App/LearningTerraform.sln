@@ -3,16 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningTerraform.Api", "LearningTerraform.Api\LearningTerraform.Api.csproj", "{99032048-5EFB-4731-A953-E57A45CD4030}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F7CC877E-280D-439B-8F31-B956D8589AC5}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningTerraform.BusinessLogic", "LearningTerraform.BusinessLogic\LearningTerraform.BusinessLogic.csproj", "{A551BA01-90C1-4D7B-AE81-95A71E5B9B52}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningTerraform.DataAccess.MsSql", "LearningTerraform.DataAccess.MsSql\LearningTerraform.DataAccess.MsSql.csproj", "{1ECD0C51-20A5-45C9-B192-EE4317ABEB0F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E3887831-D755-4985-BAF7-AA4E5B2218C0}"
 EndProject
@@ -20,37 +14,43 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{89998B02-1EB
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningTerraform.BusinessLogic.UnitTests", "Tests\LearningTerraform.BusinessLogic.UnitTests\LearningTerraform.BusinessLogic.UnitTests.csproj", "{653756BC-4E53-4B56-B51E-1DAC76021BA8}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningTerraform.Api", "Src\LearningTerraform.Api\LearningTerraform.Api.csproj", "{ADB903FF-D705-45B9-998F-040BF7A0AB76}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningTerraform.BusinessLogic", "Src\LearningTerraform.BusinessLogic\LearningTerraform.BusinessLogic.csproj", "{BA9CB22E-675A-43DD-9E56-2DB3255799BC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningTerraform.DataAccess.MsSql", "Src\LearningTerraform.DataAccess.MsSql\LearningTerraform.DataAccess.MsSql.csproj", "{F7F3F9CC-304E-4529-8440-36B7F30713B3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{99032048-5EFB-4731-A953-E57A45CD4030}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{99032048-5EFB-4731-A953-E57A45CD4030}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{99032048-5EFB-4731-A953-E57A45CD4030}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{99032048-5EFB-4731-A953-E57A45CD4030}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A551BA01-90C1-4D7B-AE81-95A71E5B9B52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A551BA01-90C1-4D7B-AE81-95A71E5B9B52}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A551BA01-90C1-4D7B-AE81-95A71E5B9B52}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A551BA01-90C1-4D7B-AE81-95A71E5B9B52}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1ECD0C51-20A5-45C9-B192-EE4317ABEB0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1ECD0C51-20A5-45C9-B192-EE4317ABEB0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1ECD0C51-20A5-45C9-B192-EE4317ABEB0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1ECD0C51-20A5-45C9-B192-EE4317ABEB0F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{653756BC-4E53-4B56-B51E-1DAC76021BA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{653756BC-4E53-4B56-B51E-1DAC76021BA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{653756BC-4E53-4B56-B51E-1DAC76021BA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{653756BC-4E53-4B56-B51E-1DAC76021BA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADB903FF-D705-45B9-998F-040BF7A0AB76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADB903FF-D705-45B9-998F-040BF7A0AB76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADB903FF-D705-45B9-998F-040BF7A0AB76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADB903FF-D705-45B9-998F-040BF7A0AB76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA9CB22E-675A-43DD-9E56-2DB3255799BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA9CB22E-675A-43DD-9E56-2DB3255799BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA9CB22E-675A-43DD-9E56-2DB3255799BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA9CB22E-675A-43DD-9E56-2DB3255799BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7F3F9CC-304E-4529-8440-36B7F30713B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7F3F9CC-304E-4529-8440-36B7F30713B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7F3F9CC-304E-4529-8440-36B7F30713B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7F3F9CC-304E-4529-8440-36B7F30713B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{99032048-5EFB-4731-A953-E57A45CD4030} = {89998B02-1EB9-42BB-9B01-9872E38A7F5D}
-		{A551BA01-90C1-4D7B-AE81-95A71E5B9B52} = {89998B02-1EB9-42BB-9B01-9872E38A7F5D}
-		{1ECD0C51-20A5-45C9-B192-EE4317ABEB0F} = {89998B02-1EB9-42BB-9B01-9872E38A7F5D}
 		{653756BC-4E53-4B56-B51E-1DAC76021BA8} = {E3887831-D755-4985-BAF7-AA4E5B2218C0}
+		{ADB903FF-D705-45B9-998F-040BF7A0AB76} = {89998B02-1EB9-42BB-9B01-9872E38A7F5D}
+		{BA9CB22E-675A-43DD-9E56-2DB3255799BC} = {89998B02-1EB9-42BB-9B01-9872E38A7F5D}
+		{F7F3F9CC-304E-4529-8440-36B7F30713B3} = {89998B02-1EB9-42BB-9B01-9872E38A7F5D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B1FC7CAB-EF94-4E1B-B838-F253C1E6962D}
