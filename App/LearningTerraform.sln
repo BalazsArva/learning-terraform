@@ -18,6 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E3887831
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{89998B02-1EB9-42BB-9B01-9872E38A7F5D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningTerraform.BusinessLogic.UnitTests", "Tests\LearningTerraform.BusinessLogic.UnitTests\LearningTerraform.BusinessLogic.UnitTests.csproj", "{653756BC-4E53-4B56-B51E-1DAC76021BA8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +38,10 @@ Global
 		{1ECD0C51-20A5-45C9-B192-EE4317ABEB0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1ECD0C51-20A5-45C9-B192-EE4317ABEB0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1ECD0C51-20A5-45C9-B192-EE4317ABEB0F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{653756BC-4E53-4B56-B51E-1DAC76021BA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{653756BC-4E53-4B56-B51E-1DAC76021BA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{653756BC-4E53-4B56-B51E-1DAC76021BA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{653756BC-4E53-4B56-B51E-1DAC76021BA8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,6 +50,7 @@ Global
 		{99032048-5EFB-4731-A953-E57A45CD4030} = {89998B02-1EB9-42BB-9B01-9872E38A7F5D}
 		{A551BA01-90C1-4D7B-AE81-95A71E5B9B52} = {89998B02-1EB9-42BB-9B01-9872E38A7F5D}
 		{1ECD0C51-20A5-45C9-B192-EE4317ABEB0F} = {89998B02-1EB9-42BB-9B01-9872E38A7F5D}
+		{653756BC-4E53-4B56-B51E-1DAC76021BA8} = {E3887831-D755-4985-BAF7-AA4E5B2218C0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B1FC7CAB-EF94-4E1B-B838-F253C1E6962D}
