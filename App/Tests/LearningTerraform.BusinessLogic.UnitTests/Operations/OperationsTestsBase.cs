@@ -33,25 +33,17 @@ namespace LearningTerraform.BusinessLogic.UnitTests.Operations
             var pets = new Dictionary<string, Pet>();
             var owners = new Dictionary<string, Owner>();
 
-            var stubPetRepository = new StubPetRepository(pets);
-            var stubOwnerRepository = new StubOwnerRepository(owners, pets);
-
             UnitOfWorkMock = new Mock<IUnitOfWork>();
             UnitOfWorkFactoryMock = new Mock<IUnitOfWorkFactory>();
 
-            PetRepositoryMock = new Mock<StubPetRepository> { CallBase = true };
+            PetRepositoryMock = new Mock<StubPetRepository>(pets) { CallBase = true };
             PetReadRepositoryMock = PetRepositoryMock.As<IPetReadRepository>();
             PetWriteRepositoryMock = PetRepositoryMock.As<IPetWriteRepository>();
 
-            OwnerRepositoryMock = new Mock<StubOwnerRepository> { CallBase = true };
+            OwnerRepositoryMock = new Mock<StubOwnerRepository>(owners, pets) { CallBase = true };
             OwnerReadRepositoryMock = OwnerRepositoryMock.As<IOwnerReadRepository>();
             OwnerWriteRepositoryMock = OwnerRepositoryMock.As<IOwnerWriteRepository>();
 
-            // Could also try (if the above does not work):
-            // Mock.Get<IPetReadRepository>(stubPetRepository);
-            // Mock.Get<IPetWriteRepository>(stubPetRepository);
-            // Mock.Get<IOwnerReadRepository>(stubOwnerRepository);
-            // Mock.Get<IOwnerWriteRepository>(stubOwnerRepository);
             UnitOfWorkMock
                 .SetupGet(x => x.PetReadRepository)
                 .Returns(PetReadRepositoryMock.Object);

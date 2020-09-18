@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using LearningTerraform.BusinessLogic.DataAccess.Abstractions;
@@ -16,6 +16,8 @@ namespace LearningTerraform.BusinessLogic.UnitTests.Stubs
             this.owners = owners ?? throw new ArgumentNullException(nameof(owners));
             this.pets = pets ?? throw new ArgumentNullException(nameof(pets));
         }
+
+        public IEnumerable<Owner> Owners => owners.Values;
 
         public Task<string> CreateAsync(Owner owner)
         {
