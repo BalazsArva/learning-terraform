@@ -19,6 +19,11 @@ namespace LearningTerraform.BusinessLogic.UnitTests.Stubs
 
         public IEnumerable<Owner> Owners => owners.Values;
 
+        public void Add(Owner owner)
+        {
+            owners[owner.Id] = owner;
+        }
+
         public Task<string> CreateAsync(Owner owner)
         {
             var id = Guid.NewGuid().ToString("n");
