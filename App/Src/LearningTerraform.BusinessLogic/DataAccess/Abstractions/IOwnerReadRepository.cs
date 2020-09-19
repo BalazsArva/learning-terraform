@@ -5,6 +5,8 @@ namespace LearningTerraform.BusinessLogic.DataAccess.Abstractions
 {
     public interface IOwnerReadRepository
     {
+        Task<bool> ExistsAsync(string id);
+
         Task<Owner> GetByIdAsync(string id);
     }
 }

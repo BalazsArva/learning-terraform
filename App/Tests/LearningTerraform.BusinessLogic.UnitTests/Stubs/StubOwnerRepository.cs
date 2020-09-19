@@ -45,6 +45,11 @@ namespace LearningTerraform.BusinessLogic.UnitTests.Stubs
             return Task.FromResult(id);
         }
 
+        public Task<bool> ExistsAsync(string id)
+        {
+            return Task.FromResult(owners.TryGetValue(id, out var owner) && !(owner is null));
+        }
+
         public Task<Owner> GetByIdAsync(string id)
         {
             var result = owners.TryGetValue(id, out var owner)
