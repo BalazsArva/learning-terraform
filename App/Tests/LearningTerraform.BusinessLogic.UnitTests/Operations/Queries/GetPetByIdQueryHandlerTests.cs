@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace LearningTerraform.BusinessLogic.UnitTests.Operations.Queries
 {
     [TestFixture]
-    public class GetPetByIdQueryTests : OperationsTestsBase
+    public class GetPetByIdQueryHandlerTests : OperationsTestsBase
     {
         private GetPetByIdQueryHandler handler;
 
