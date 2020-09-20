@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace LearningTerraform.BusinessLogic.UnitTests.Operations.Commands
 {
     [TestFixture]
-    public class CreatePetCommandTests : OperationsTestsBase
+    public class CreatePetCommandHandlerTests : OperationsTestsBase
     {
         private const string DefaultName = "DefaultName";
         private const string DefaultOwnerId = "DefaultOwnerId";

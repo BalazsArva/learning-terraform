@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace LearningTerraform.BusinessLogic.UnitTests.Operations.Commands
 {
     [TestFixture]
-    public class CreateOwnerCommandTests : OperationsTestsBase
+    public class CreateOwnerCommandHandlerTests : OperationsTestsBase
     {
         private const string DefaultFirstName = "DefaultFirstName";
         private const string DefaultLastName = "DefaultLastName";
