@@ -17,6 +17,11 @@ namespace LearningTerraform.BusinessLogic.UnitTests.Stubs
 
         public IEnumerable<Pet> Pets => pets.Values;
 
+        public void Add(Pet pet)
+        {
+            pets[pet.Id] = pet;
+        }
+
         public Task<string> CreateAsync(string ownerId, Pet pet)
         {
             var id = Guid.NewGuid().ToString("n");
