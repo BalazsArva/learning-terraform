@@ -20,6 +20,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningTerraform.BusinessL
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningTerraform.DataAccess.MsSql", "Src\LearningTerraform.DataAccess.MsSql\LearningTerraform.DataAccess.MsSql.csproj", "{F7F3F9CC-304E-4529-8440-36B7F30713B3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearningTerraform.Api.IntegrationTests", "Tests\LearningTerraform.Api.IntegrationTests\LearningTerraform.Api.IntegrationTests.csproj", "{F90330A5-664D-4FCC-A30A-597C8816F86C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +44,10 @@ Global
 		{F7F3F9CC-304E-4529-8440-36B7F30713B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7F3F9CC-304E-4529-8440-36B7F30713B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7F3F9CC-304E-4529-8440-36B7F30713B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F90330A5-664D-4FCC-A30A-597C8816F86C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F90330A5-664D-4FCC-A30A-597C8816F86C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F90330A5-664D-4FCC-A30A-597C8816F86C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F90330A5-664D-4FCC-A30A-597C8816F86C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -51,6 +57,7 @@ Global
 		{ADB903FF-D705-45B9-998F-040BF7A0AB76} = {89998B02-1EB9-42BB-9B01-9872E38A7F5D}
 		{BA9CB22E-675A-43DD-9E56-2DB3255799BC} = {89998B02-1EB9-42BB-9B01-9872E38A7F5D}
 		{F7F3F9CC-304E-4529-8440-36B7F30713B3} = {89998B02-1EB9-42BB-9B01-9872E38A7F5D}
+		{F90330A5-664D-4FCC-A30A-597C8816F86C} = {E3887831-D755-4985-BAF7-AA4E5B2218C0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B1FC7CAB-EF94-4E1B-B838-F253C1E6962D}
