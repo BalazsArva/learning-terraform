@@ -23,10 +23,10 @@ namespace LearningTerraform.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
-
             services.AddBusinessLogic();
             services.AddDataAccess();
+
+            services.AddControllers();
 
             services
                 .AddDbContext<DataContext>(
@@ -34,7 +34,7 @@ namespace LearningTerraform.Api
                     ServiceLifetime.Transient,
                     ServiceLifetime.Singleton);
 
-            services.AddSwagger();
+            services.AddApiDocumentation();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -51,7 +51,14 @@ namespace LearningTerraform.Api
             app.UseAuthorization();
 
             app.UseOpenApi();
-            app.UseSwaggerUi3(settings => { settings.OAuth2Client = new OAuth2ClientSettings { AppName = "PetsAndOwners", Realm = "PetsAndOwners" }; });
+            app.UseSwaggerUi3(settings =>
+            {
+                settings.OAuth2Client = new OAuth2ClientSettings
+                {
+                    AppName = "PetsAndOwners",
+                    Realm = "PetsAndOwners",
+                };
+            });
 
             app.UseEndpoints(endpoints =>
             {

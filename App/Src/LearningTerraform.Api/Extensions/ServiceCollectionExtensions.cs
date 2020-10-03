@@ -5,28 +5,28 @@ namespace LearningTerraform.Api.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddSwagger(this IServiceCollection services)
+        public static IServiceCollection AddApiDocumentation(this IServiceCollection services)
         {
-            services.AddOpenApiDocument(document =>
+            services.AddApiVersioning(cfg =>
             {
-                document.Version = "v1";
-                document.ApiGroupNames = new[] { "1" };
-                document.Title = "PetsAndOwners";
-                document.DocumentName = "v1";
-                document.SchemaType = NJsonSchema.SchemaType.OpenApi3;
+                cfg.AssumeDefaultVersionWhenUnspecified = true;
+                cfg.ApiVersionReader = new UrlSegmentApiVersionReader();
             });
 
-            services.AddApiVersioning(o =>
+            services.AddVersionedApiExplorer(cfg =>
             {
-                o.AssumeDefaultVersionWhenUnspecified = true;
-                o.ApiVersionReader = new UrlSegmentApiVersionReader();
+                cfg.AssumeDefaultVersionWhenUnspecified = true;
+                cfg.GroupNameFormat = "VVV";
+                cfg.SubstituteApiVersionInUrl = true;
             });
 
-            services.AddVersionedApiExplorer(options =>
+            services.AddSwaggerDocument(cfg =>
             {
-                options.AssumeDefaultVersionWhenUnspecified = true;
-                options.GroupNameFormat = "VVV";
-                options.SubstituteApiVersionInUrl = true;
+                cfg.Version = "v1";
+                cfg.ApiGroupNames = new[] { "1" };
+                cfg.Title = "PetsAndOwners";
+                cfg.DocumentName = "v1";
+                cfg.SchemaType = NJsonSchema.SchemaType.OpenApi3;
             });
 
             return services;
