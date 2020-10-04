@@ -1,8 +1,6 @@
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 using LearningTerraform.ApiClient;
-using LearningTerraform.DataAccess.MsSql.Database;
 using LearningTerraform.DataAccess.MsSql.Entities;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -152,42 +150,6 @@ namespace LearningTerraform.Api.IntegrationTests.Controllers
         private OwnersClient CreateOwnersClient()
         {
             return new OwnersClient(Factory.ClientOptions.BaseAddress.ToString(), CreateHttpClient());
-        }
-    }
-
-    public abstract class ControllerTestBase
-    {
-        public const string DefaultNonexistentEntityId = "DefaultNonexistentEntityId";
-
-        public ControllerTestBase()
-        {
-            Factory = new DefaultWebApplicationFactory();
-        }
-
-        public WebApplicationFactory<Startup> Factory { get; }
-
-        protected async Task CleanupDatabase()
-        {
-            using var cleanupContext = CreateDataContext();
-
-            cleanupContext.Pets.RemoveRange(await cleanupContext.Pets.ToListAsync());
-            cleanupContext.Owners.RemoveRange(await cleanupContext.Owners.ToListAsync());
-
-            await cleanupContext.SaveChangesAsync();
-        }
-
-        protected DataContext CreateDataContext()
-        {
-            var dbContextOptions = new DbContextOptionsBuilder<DataContext>()
-                .UseSqlServer("Data Source=(localdb)\\MSSQLLocalDb;Initial Catalog=LearningTerraform;Integrated Security=true")
-                .Options;
-
-            return new DataContext(dbContextOptions);
-        }
-
-        protected HttpClient CreateHttpClient()
-        {
-            return Factory.CreateClient();
         }
     }
 
