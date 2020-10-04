@@ -3,7 +3,7 @@
 # Future plans
 
 * [x] A sample, dockerized ASP.NET Core application which uses MS SQL, EF and DB migrations
-* [>] Tests for the application:
+* [ ] Tests for the application:
 
   * [x] __Unit tests:__ because every application must have these. Especially pet projects.
   * [ ] __Pre-deployment integration tests:__ Pre-deployment integration tests aim to verify the correctness of the application before deploying to any "real" environment. This can be done with ASP.NET Core in-memory hosting against dedicated dependencies (such as a DB instance reserved for this purpose). Dedicated dependencies are required to avoid any interference with other users or services. The goal of this stage is to catch as many failures as possible before committing to any more risky or complex stage, such as DB migration or application deployment. By running these tests before deployment and using a technique such as the ASP.NET Core in-memory testing framework, we enable the tests to verfiy special scenarios, such as simulate responses from other services that would otherwise be hard or impossible to force to happen consistently accross test runs, as it is often the case with third-party services.
