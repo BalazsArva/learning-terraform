@@ -1,8 +1,9 @@
-﻿using System.Net.Http;
+using System.Net.Http;
 using System.Threading.Tasks;
 using LearningTerraform.DataAccess.MsSql.Database;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LearningTerraform.Api.IntegrationTests.Controllers
 {
@@ -29,11 +30,7 @@ namespace LearningTerraform.Api.IntegrationTests.Controllers
 
         protected DataContext CreateDataContext()
         {
-            var dbContextOptions = new DbContextOptionsBuilder<DataContext>()
-                .UseSqlServer("Data Source=(localdb)\\MSSQLLocalDb;Initial Catalog=LearningTerraform;Integrated Security=true")
-                .Options;
-
-            return new DataContext(dbContextOptions);
+            return Factory.Services.GetRequiredService<DataContext>();
         }
 
         protected HttpClient CreateHttpClient()
