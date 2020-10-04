@@ -2,9 +2,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using LearningTerraform.ApiClient;
 using LearningTerraform.DataAccess.MsSql.Entities;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 
@@ -150,16 +148,6 @@ namespace LearningTerraform.Api.IntegrationTests.Controllers
         private OwnersClient CreateOwnersClient()
         {
             return new OwnersClient(Factory.ClientOptions.BaseAddress.ToString(), CreateHttpClient());
-        }
-    }
-
-    public class DefaultWebApplicationFactory : WebApplicationFactory<Startup>
-    {
-        protected override void ConfigureWebHost(IWebHostBuilder builder)
-        {
-            builder.ConfigureServices(services =>
-            {
-            });
         }
     }
 }
