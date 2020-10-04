@@ -27,7 +27,7 @@ namespace LearningTerraform.Api.Controllers
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(OwnerResponse))]
-        public async Task<IActionResult> Create(CreateOwnerRequest request)
+        public async Task<IActionResult> Create([FromBody] CreateOwnerRequest request)
         {
             var ownerId = await createOwnerCommandHandler.HandleAsync(new CreateOwnerCommand
             {

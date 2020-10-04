@@ -49,26 +49,20 @@ namespace LearningTerraform.ApiClient
         partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response);
     
         /// <exception cref="SwaggerException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<OwnerResponse> CreateAsync(string firstName, string lastName)
+        public System.Threading.Tasks.Task<OwnerResponse> CreateAsync(CreateOwnerRequest request)
         {
-            return CreateAsync(firstName, lastName, System.Threading.CancellationToken.None);
+            return CreateAsync(request, System.Threading.CancellationToken.None);
         }
     
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <exception cref="SwaggerException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<OwnerResponse> CreateAsync(string firstName, string lastName, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task<OwnerResponse> CreateAsync(CreateOwnerRequest request, System.Threading.CancellationToken cancellationToken)
         {
+            if (request == null)
+                throw new System.ArgumentNullException("request");
+    
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Owners?");
-            if (firstName != null) 
-            {
-                urlBuilder_.Append(System.Uri.EscapeDataString("FirstName") + "=").Append(System.Uri.EscapeDataString(ConvertToString(firstName, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            }
-            if (lastName != null) 
-            {
-                urlBuilder_.Append(System.Uri.EscapeDataString("LastName") + "=").Append(System.Uri.EscapeDataString(ConvertToString(lastName, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            }
-            urlBuilder_.Length--;
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Owners");
     
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -76,7 +70,9 @@ namespace LearningTerraform.ApiClient
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request_.Content = new System.Net.Http.StringContent(string.Empty, System.Text.Encoding.UTF8, "application/json");
+                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(request, _settings.Value));
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
     
@@ -733,6 +729,61 @@ namespace LearningTerraform.ApiClient
         public static PetResponse FromJson(string data)
         {
             return Newtonsoft.Json.JsonConvert.DeserializeObject<PetResponse>(data);
+        }
+    
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected virtual void RaisePropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
+        {
+            var handler = PropertyChanged;
+            if (handler != null) 
+                handler(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+        }
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.2.1.0 (Newtonsoft.Json v12.0.0.0)")]
+    public partial class CreateOwnerRequest : System.ComponentModel.INotifyPropertyChanged
+    {
+        private string _firstName;
+        private string _lastName;
+    
+        [Newtonsoft.Json.JsonProperty("FirstName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string FirstName
+        {
+            get { return _firstName; }
+            set 
+            {
+                if (_firstName != value)
+                {
+                    _firstName = value; 
+                    RaisePropertyChanged();
+                }
+            }
+        }
+    
+        [Newtonsoft.Json.JsonProperty("LastName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string LastName
+        {
+            get { return _lastName; }
+            set 
+            {
+                if (_lastName != value)
+                {
+                    _lastName = value; 
+                    RaisePropertyChanged();
+                }
+            }
+        }
+    
+        public string ToJson() 
+        {
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this);
+        }
+    
+        public static CreateOwnerRequest FromJson(string data)
+        {
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<CreateOwnerRequest>(data);
         }
     
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
