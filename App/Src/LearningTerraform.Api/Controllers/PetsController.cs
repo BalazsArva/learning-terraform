@@ -26,7 +26,7 @@ namespace LearningTerraform.Api.Controllers
 
         [HttpPost("/api/owners/{ownerId}/pets")]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(PetResponse))]
-        public async Task<IActionResult> Create(string ownerId, CreatePetRequest request)
+        public async Task<IActionResult> Create(string ownerId, [FromBody] CreatePetRequest request)
         {
             var petId = await createPetCommandHandler.HandleAsync(new CreatePetCommand
             {
