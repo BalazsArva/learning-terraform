@@ -1,4 +1,5 @@
 using LearningTerraform.Api.Extensions;
+using LearningTerraform.Api.Filters;
 using LearningTerraform.BusinessLogic.Extensions;
 using LearningTerraform.DataAccess.MsSql.Database;
 using LearningTerraform.DataAccess.MsSql.Extensions;
@@ -26,7 +27,7 @@ namespace LearningTerraform.Api
             services.AddBusinessLogic();
             services.AddDataAccess();
 
-            services.AddControllers();
+            services.AddControllers(options => options.Filters.Add<EntityNotFoundExceptionFilterAttribute>());
 
             services
                 .AddDbContext<DataContext>(
