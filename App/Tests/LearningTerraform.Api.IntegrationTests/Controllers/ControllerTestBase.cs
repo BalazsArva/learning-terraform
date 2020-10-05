@@ -11,6 +11,15 @@ namespace LearningTerraform.Api.IntegrationTests.Controllers
     {
         public const string DefaultNonexistentEntityId = "DefaultNonexistentEntityId";
 
+        public const string DefaultOwnerPublicId = "c6aa50d20a57439ea027df37f9b34a54";
+        public const string DefaultOwnerFirstName = "OwnerFirstName";
+        public const string DefaultOwnerLastName = "OwnerLastName";
+
+        public const string DefaultPetName1 = "DefaultPetName1";
+        public const string DefaultPetName2 = "DefaultPetName2";
+        public const string DefaultPetPublicId1 = "6cee7d445bc941a78b58022c115107a8";
+        public const string DefaultPetPublicId2 = "1473674530a14d04aa9e8c3925d6e07e";
+
         public ControllerTestBase()
         {
             Factory = new DefaultWebApplicationFactory();

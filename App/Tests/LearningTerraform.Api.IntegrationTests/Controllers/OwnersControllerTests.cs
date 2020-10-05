@@ -11,15 +11,6 @@ namespace LearningTerraform.Api.IntegrationTests.Controllers
     [TestFixture]
     public class OwnersControllerTests : ControllerTestBase
     {
-        private const string DefaultPublicId = "c6aa50d20a57439ea027df37f9b34a54";
-        private const string DefaultFirstName = "OwnerFirstName";
-        private const string DefaultLastName = "OwnerLastName";
-
-        private const string DefaultPetName1 = "DefaultPetName1";
-        private const string DefaultPetName2 = "DefaultPetName2";
-        private const string DefaultPetPublicId1 = "6cee7d445bc941a78b58022c115107a8";
-        private const string DefaultPetPublicId2 = "1473674530a14d04aa9e8c3925d6e07e";
-
         [SetUp]
         public async Task SetUpAsync()
         {
@@ -44,9 +35,9 @@ namespace LearningTerraform.Api.IntegrationTests.Controllers
             {
                 var ownerDbEntity = new Owner
                 {
-                    FirstName = DefaultFirstName,
-                    LastName = DefaultLastName,
-                    PublicId = DefaultPublicId,
+                    FirstName = DefaultOwnerFirstName,
+                    LastName = DefaultOwnerLastName,
+                    PublicId = DefaultOwnerPublicId,
                 };
 
                 preparationContext.Owners.Add(ownerDbEntity);
@@ -56,13 +47,13 @@ namespace LearningTerraform.Api.IntegrationTests.Controllers
 
             var client = CreateOwnersClient();
 
-            var owner = await client.GetByIdAsync(DefaultPublicId);
+            var owner = await client.GetByIdAsync(DefaultOwnerPublicId);
 
             Assert.IsNotNull(owner);
 
-            Assert.AreEqual(DefaultPublicId, owner.Id);
-            Assert.AreEqual(DefaultFirstName, owner.FirstName);
-            Assert.AreEqual(DefaultLastName, owner.LastName);
+            Assert.AreEqual(DefaultOwnerPublicId, owner.Id);
+            Assert.AreEqual(DefaultOwnerFirstName, owner.FirstName);
+            Assert.AreEqual(DefaultOwnerLastName, owner.LastName);
         }
 
         [Test]
@@ -72,9 +63,9 @@ namespace LearningTerraform.Api.IntegrationTests.Controllers
             {
                 var ownerDbEntity = new Owner
                 {
-                    FirstName = DefaultFirstName,
-                    LastName = DefaultLastName,
-                    PublicId = DefaultPublicId,
+                    FirstName = DefaultOwnerFirstName,
+                    LastName = DefaultOwnerLastName,
+                    PublicId = DefaultOwnerPublicId,
                 };
 
                 var petEntity1 = new Pet
@@ -101,13 +92,13 @@ namespace LearningTerraform.Api.IntegrationTests.Controllers
 
             var client = CreateOwnersClient();
 
-            var owner = await client.GetByIdAsync(DefaultPublicId);
+            var owner = await client.GetByIdAsync(DefaultOwnerPublicId);
 
             Assert.IsNotNull(owner);
 
-            Assert.AreEqual(DefaultPublicId, owner.Id);
-            Assert.AreEqual(DefaultFirstName, owner.FirstName);
-            Assert.AreEqual(DefaultLastName, owner.LastName);
+            Assert.AreEqual(DefaultOwnerPublicId, owner.Id);
+            Assert.AreEqual(DefaultOwnerFirstName, owner.FirstName);
+            Assert.AreEqual(DefaultOwnerLastName, owner.LastName);
 
             Assert.AreEqual(2, owner.Pets.Count);
 
@@ -125,12 +116,12 @@ namespace LearningTerraform.Api.IntegrationTests.Controllers
 
             var response = await client.CreateAsync(new CreateOwnerRequest
             {
-                FirstName = DefaultFirstName,
-                LastName = DefaultLastName,
+                FirstName = DefaultOwnerFirstName,
+                LastName = DefaultOwnerLastName,
             });
 
-            Assert.AreEqual(DefaultFirstName, response.FirstName);
-            Assert.AreEqual(DefaultLastName, response.LastName);
+            Assert.AreEqual(DefaultOwnerFirstName, response.FirstName);
+            Assert.AreEqual(DefaultOwnerLastName, response.LastName);
             Assert.AreEqual(0, response.Pets.Count);
 
             using (var verificationContext = CreateDataContext())
@@ -138,8 +129,8 @@ namespace LearningTerraform.Api.IntegrationTests.Controllers
                 var ownerEntity = await verificationContext.Owners.Where(x => x.PublicId == response.Id).SingleOrDefaultAsync();
 
                 Assert.IsNotNull(ownerEntity);
-                Assert.AreEqual(DefaultFirstName, ownerEntity.FirstName);
-                Assert.AreEqual(DefaultLastName, ownerEntity.LastName);
+                Assert.AreEqual(DefaultOwnerFirstName, ownerEntity.FirstName);
+                Assert.AreEqual(DefaultOwnerLastName, ownerEntity.LastName);
 
                 Assert.AreEqual(0, await verificationContext.Pets.CountAsync());
             }

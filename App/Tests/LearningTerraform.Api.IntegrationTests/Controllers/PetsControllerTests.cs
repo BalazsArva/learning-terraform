@@ -12,13 +12,6 @@ namespace LearningTerraform.Api.IntegrationTests.Controllers
     [TestFixture]
     public class PetsControllerTests : ControllerTestBase
     {
-        private const string DefaultPublicId = "c6aa50d20a57439ea027df37f9b34a54";
-        private const string DefaultFirstName = "OwnerFirstName";
-        private const string DefaultLastName = "OwnerLastName";
-
-        private const string DefaultPetName1 = "DefaultPetName1";
-        private const string DefaultPetPublicId1 = "6cee7d445bc941a78b58022c115107a8";
-
         [SetUp]
         public async Task SetUpAsync()
         {
@@ -43,9 +36,9 @@ namespace LearningTerraform.Api.IntegrationTests.Controllers
             {
                 var ownerDbEntity = new Owner
                 {
-                    FirstName = DefaultFirstName,
-                    LastName = DefaultLastName,
-                    PublicId = DefaultPublicId,
+                    FirstName = DefaultOwnerFirstName,
+                    LastName = DefaultOwnerLastName,
+                    PublicId = DefaultOwnerPublicId,
                 };
 
                 var petEntity = new Pet
@@ -78,7 +71,7 @@ namespace LearningTerraform.Api.IntegrationTests.Controllers
             var client = CreatePetsClient();
 
             var exceptionThrown = Assert.ThrowsAsync<SwaggerException>(
-                async () => await client.CreateAsync(DefaultPublicId, new CreatePetRequest()));
+                async () => await client.CreateAsync(DefaultOwnerPublicId, new CreatePetRequest()));
 
             Assert.AreEqual(StatusCodes.Status404NotFound, exceptionThrown.StatusCode);
         }
@@ -90,9 +83,9 @@ namespace LearningTerraform.Api.IntegrationTests.Controllers
             {
                 var ownerDbEntity = new Owner
                 {
-                    FirstName = DefaultFirstName,
-                    LastName = DefaultLastName,
-                    PublicId = DefaultPublicId,
+                    FirstName = DefaultOwnerFirstName,
+                    LastName = DefaultOwnerLastName,
+                    PublicId = DefaultOwnerPublicId,
                 };
 
                 preparationContext.Owners.Add(ownerDbEntity);
@@ -103,7 +96,7 @@ namespace LearningTerraform.Api.IntegrationTests.Controllers
             var client = CreatePetsClient();
 
             var response = await client.CreateAsync(
-                DefaultPublicId,
+                DefaultOwnerPublicId,
                 new CreatePetRequest { Name = DefaultPetName1 });
 
             Assert.AreEqual(DefaultPetName1, response.Name);
@@ -113,7 +106,7 @@ namespace LearningTerraform.Api.IntegrationTests.Controllers
             {
                 var petEntity = await verificationContext
                     .Pets
-                    .Where(x => x.PublicId == response.Id && x.Owner.PublicId == DefaultPublicId)
+                    .Where(x => x.PublicId == response.Id && x.Owner.PublicId == DefaultOwnerPublicId)
                     .SingleOrDefaultAsync();
 
                 Assert.IsNotNull(petEntity);
