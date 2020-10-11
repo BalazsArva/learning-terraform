@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using LearningTerraform.DataAccess.MsSql.Database;
@@ -22,7 +23,8 @@ namespace LearningTerraform.Api.IntegrationTests
 
         protected IntegrationTestsBase()
         {
-            Factory = new DefaultWebApplicationFactory();
+            Factory = new DefaultWebApplicationFactory(
+                CreateAdditionalConfiguration());
         }
 
         public WebApplicationFactory<Startup> Factory { get; }
@@ -45,6 +47,11 @@ namespace LearningTerraform.Api.IntegrationTests
         protected HttpClient CreateHttpClient()
         {
             return Factory.CreateClient();
+        }
+
+        protected virtual IDictionary<string, string> CreateAdditionalConfiguration()
+        {
+            return null;
         }
     }
 }
