@@ -18,6 +18,9 @@ namespace LearningTerraform.Api.IntegrationTests.Controllers
         }
 
         [Test]
+        [Category(TestExecutionPolicies.PreDeployment)]
+        [Category(TestExecutionPolicies.PostDeploymentNonProd)]
+        [Category(TestExecutionPolicies.PostDeploymentProd)]
         public void GetByIdAsync_OwnerDoesNotExist_ReturnsNotFound()
         {
             var client = CreateOwnersClient();
@@ -29,6 +32,8 @@ namespace LearningTerraform.Api.IntegrationTests.Controllers
         }
 
         [Test]
+        [Category(TestExecutionPolicies.PreDeployment)]
+        [Category(TestExecutionPolicies.PostDeploymentNonProd)]
         public async Task GetByIdAsync_OwnerHasNoPets_ReturnsOwnerWithZeroPets()
         {
             using (var preparationContext = CreateDataContext())
@@ -57,6 +62,8 @@ namespace LearningTerraform.Api.IntegrationTests.Controllers
         }
 
         [Test]
+        [Category(TestExecutionPolicies.PreDeployment)]
+        [Category(TestExecutionPolicies.PostDeploymentNonProd)]
         public async Task GetByIdAsync_OwnerHasPets_ReturnsOwnerWithAllPets()
         {
             using (var preparationContext = CreateDataContext())
@@ -110,6 +117,8 @@ namespace LearningTerraform.Api.IntegrationTests.Controllers
         }
 
         [Test]
+        [Category(TestExecutionPolicies.PreDeployment)]
+        [Category(TestExecutionPolicies.PostDeploymentNonProd)]
         public async Task CreateAsync_HappyPath_CreatesOwner()
         {
             var client = CreateOwnersClient();

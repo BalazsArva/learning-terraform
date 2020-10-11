@@ -19,6 +19,9 @@ namespace LearningTerraform.Api.IntegrationTests.Controllers
         }
 
         [Test]
+        [Category(TestExecutionPolicies.PreDeployment)]
+        [Category(TestExecutionPolicies.PostDeploymentNonProd)]
+        [Category(TestExecutionPolicies.PostDeploymentProd)]
         public void GetByIdAsync_PetDoesNotExist_ReturnsNotFound()
         {
             var client = CreatePetsClient();
@@ -30,6 +33,8 @@ namespace LearningTerraform.Api.IntegrationTests.Controllers
         }
 
         [Test]
+        [Category(TestExecutionPolicies.PreDeployment)]
+        [Category(TestExecutionPolicies.PostDeploymentNonProd)]
         public async Task GetByIdAsync_PetExists_ReturnsPet()
         {
             using (var preparationContext = CreateDataContext())
@@ -66,6 +71,9 @@ namespace LearningTerraform.Api.IntegrationTests.Controllers
         }
 
         [Test]
+        [Category(TestExecutionPolicies.PreDeployment)]
+        [Category(TestExecutionPolicies.PostDeploymentNonProd)]
+        [Category(TestExecutionPolicies.PostDeploymentProd)]
         public void CreateAsync_CreatingPetForNonexistentOwner_ReturnsNotFound()
         {
             var client = CreatePetsClient();
@@ -77,6 +85,8 @@ namespace LearningTerraform.Api.IntegrationTests.Controllers
         }
 
         [Test]
+        [Category(TestExecutionPolicies.PreDeployment)]
+        [Category(TestExecutionPolicies.PostDeploymentNonProd)]
         public async Task CreateAsync_HappyPath_CreatesPet()
         {
             using (var preparationContext = CreateDataContext())
