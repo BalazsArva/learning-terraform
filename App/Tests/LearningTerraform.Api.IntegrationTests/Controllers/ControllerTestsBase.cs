@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace LearningTerraform.Api.IntegrationTests.Controllers
 {
-    public abstract class ControllerTestBase
+    public abstract class ControllerTestsBase
     {
         public const string DefaultNonexistentEntityId = "DefaultNonexistentEntityId";
 
@@ -20,7 +20,7 @@ namespace LearningTerraform.Api.IntegrationTests.Controllers
         public const string DefaultPetPublicId1 = "6cee7d445bc941a78b58022c115107a8";
         public const string DefaultPetPublicId2 = "1473674530a14d04aa9e8c3925d6e07e";
 
-        public ControllerTestBase()
+        public ControllerTestsBase()
         {
             Factory = new DefaultWebApplicationFactory();
         }

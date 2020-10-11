@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace LearningTerraform.Api.IntegrationTests.Controllers
 {
     [TestFixture]
-    public class OwnersControllerTests : ControllerTestBase
+    public class OwnersControllerTests : ControllerTestsBase
     {
         [SetUp]
         public async Task SetUpAsync()
