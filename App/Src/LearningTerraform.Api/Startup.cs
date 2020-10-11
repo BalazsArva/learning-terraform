@@ -1,5 +1,6 @@
 using LearningTerraform.Api.Extensions;
-using LearningTerraform.Api.Filters;
+using LearningTerraform.Api.Utilities.Filters;
+using LearningTerraform.Api.Utilities.Middlewares;
 using LearningTerraform.BusinessLogic.Extensions;
 using LearningTerraform.DataAccess.MsSql.Database;
 using LearningTerraform.DataAccess.MsSql.Extensions;
@@ -27,6 +28,7 @@ namespace LearningTerraform.Api
             services.AddBusinessLogic();
             services.AddDataAccess();
 
+            services.AddHealthChecks();
             services.AddControllers(options => options.Filters.Add<EntityNotFoundExceptionFilterAttribute>());
 
             services
@@ -36,6 +38,7 @@ namespace LearningTerraform.Api
                     ServiceLifetime.Singleton);
 
             services.AddApiDocumentation();
+            services.AddApiVersionOptions(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -44,6 +47,8 @@ namespace LearningTerraform.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseMiddleware<ApplicationVersionHeadersMiddleware>();
 
             app.UseHttpsRedirection();
 
@@ -61,6 +66,7 @@ namespace LearningTerraform.Api
                 };
             });
 
+            app.UseHealthChecks("/health-check");
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

@@ -1,4 +1,6 @@
+using LearningTerraform.Api.Options;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace LearningTerraform.Api.Extensions
@@ -28,6 +30,14 @@ namespace LearningTerraform.Api.Extensions
                 cfg.DocumentName = "v1";
                 cfg.SchemaType = NJsonSchema.SchemaType.OpenApi3;
             });
+
+            return services;
+        }
+
+        public static IServiceCollection AddApiVersionOptions(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddOptions<ApplicationVersionOptions>()
+                .Bind(configuration.GetSection(ApplicationVersionOptions.SectionName));
 
             return services;
         }

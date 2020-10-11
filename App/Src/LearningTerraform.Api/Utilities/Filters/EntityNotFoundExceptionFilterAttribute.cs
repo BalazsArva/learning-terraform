@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace LearningTerraform.Api.Filters
+namespace LearningTerraform.Api.Utilities.Filters
 {
     public class EntityNotFoundExceptionFilterAttribute : ExceptionFilterAttribute
     {
