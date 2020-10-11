@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace LearningTerraform.Api.IntegrationTests.Controllers
+namespace LearningTerraform.Api.IntegrationTests
 {
     public abstract class IntegrationTestsBase
     {
