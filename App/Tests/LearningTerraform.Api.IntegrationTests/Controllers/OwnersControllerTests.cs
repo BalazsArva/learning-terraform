@@ -14,7 +14,7 @@ namespace LearningTerraform.Api.IntegrationTests.Controllers
         [SetUp]
         public async Task SetUpAsync()
         {
-            await CleanupDatabase();
+            await CleanupDatabaseAsync();
         }
 
         [Test]

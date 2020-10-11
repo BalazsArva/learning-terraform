@@ -27,7 +27,7 @@ namespace LearningTerraform.Api.IntegrationTests.Controllers
 
         public WebApplicationFactory<Startup> Factory { get; }
 
-        protected async Task CleanupDatabase()
+        protected async Task CleanupDatabaseAsync()
         {
             using var cleanupContext = CreateDataContext();
 
