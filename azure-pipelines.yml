@@ -36,6 +36,8 @@ stages:
         workingDirectory: '$(System.DefaultWorkingDirectory)/App/Tests/LearningTerraform.BusinessLogic.UnitTests'
 
   - job: ApplyTerraform
+    # Temp only
+    condition: false
     displayName: Apply Terraform
     steps:
     - script: terraform init
