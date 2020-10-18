@@ -53,11 +53,13 @@ stages:
     #     args: '-h host.docker.internal -p 1433 -t 120'
     #   displayName: Wait for DB Container
     - script: |
+        export PATH=$PATH:$HOME/.dotnet/tools
+        . ~/.bashrc
         dotnet ef database update -s ../LearningTerraform.Api
       displayName: Migrate Database in Container
       workingDirectory: '$(System.DefaultWorkingDirectory)/App/Src/LearningTerraform.DataAccess.MsSql'
       env:
-        ConnectionStrings__Default: 'Server=host.docker.internal:1433;Database=LearningTerraform;User Id=sa;password=$(DockerDbContainerPassword)'
+        ConnectionStrings__Default: 'Server=localhost:1433;Database=LearningTerraform;User Id=sa;password=$(DockerDbContainerPassword)'
     - script: |
         docker stop MSSQL
       displayName: Destroy DB Container
