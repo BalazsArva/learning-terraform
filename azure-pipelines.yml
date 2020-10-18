@@ -41,12 +41,13 @@ stages:
         dotnet tool install --global --version 3.1.9 dotnet-ef
         export PATH=$PATH:$HOME/.dotnet/tools
         . ~/.bashrc
+        sudo wait-for-it.sh -h host.docker.internal -p 1433 -t 120
       displayName: Install tools
-    - task: ShellScript@2
-      inputs:
-        scriptPath: '$(System.DefaultWorkingDirectory)/wait-for-it.sh'
-        args: '-h host.docker.internal -p 1433 -t 120'
-      displayName: Wait for DB Container
+    # - task: ShellScript@2
+    #   inputs:
+    #     scriptPath: '$(System.DefaultWorkingDirectory)/wait-for-it.sh'
+    #     args: '-h host.docker.internal -p 1433 -t 120'
+    #   displayName: Wait for DB Container
     - script: |
         dotnet ef database update -s ../LearningTerraform.Api
       displayName: Migrate Database in Container
