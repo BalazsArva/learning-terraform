@@ -40,6 +40,12 @@ stages:
         dotnet tool install --global --version 3.1.9 dotnet-ef
         export PATH=$PATH:$HOME/.dotnet/tools
         . ~/.bashrc
+      displayName: Install EF Core global tools
+    - script: |
+        wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh $(System.DefaultWorkingDirectory)/wait-for-it.sh
+        $(System.DefaultWorkingDirectory)/wait-for-it.sh
+      displayName: Wait for DB Container
+    - script: |
         dotnet ef database update -s ../LearningTerraform.Api
       displayName: Migrate Database in Container
       workingDirectory: '$(System.DefaultWorkingDirectory)/App/Src/LearningTerraform.DataAccess.MsSql'
