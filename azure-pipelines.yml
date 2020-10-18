@@ -36,6 +36,12 @@ stages:
         echo $(DockerDbContainerPassword)
         docker run -d --name MSSQL --rm -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=$(DockerDbContainerPassword)' -e 'MSSQL_PID=Developer' -p 1433:1433 -d mcr.microsoft.com/mssql/server:2017-latest
       displayName: Run DB Container
+    - script:
+        dotnet ef database update -s ..\LearningTerraform.Api
+      displayName: Migrate Database in Container
+      workingDirectory: '$(System.DefaultWorkingDirectory)/App/Src/LearningTerraform.DataAccess.MsSql'
+      env:
+        ConnectionStrings__Default: 'Server=host.docker.internal:1433;Database=LearningTerraform;User Id=sa;password=$(DockerDbContainerPassword)'
     - script: |
         docker stop MSSQL
       displayName: Remove DB Container
