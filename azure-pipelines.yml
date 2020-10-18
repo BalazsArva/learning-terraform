@@ -34,7 +34,7 @@ stages:
       inputs:
         command: test
         arguments: '--no-build'
-        projects: '$(System.DefaultWorkingDirectory)/App/LearningTerraform.sln'
+        projects: '$(System.DefaultWorkingDirectory)/App/Tests/LearningTerraform.BusinessLogic.UnitTests'
 
   - job: ApplyTerraform
     dependsOn: BuildAndTest
