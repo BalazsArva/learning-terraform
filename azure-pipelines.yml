@@ -1,6 +1,6 @@
 trigger:
   - master
-  
+
 variables:
   - group: AzureCredentials
 
@@ -8,6 +8,25 @@ pool:
   vmImage: 'ubuntu-latest'
 
 jobs:
+- job: BuildAndTest
+  displayName: Build & Test
+  steps:
+  - task: DotNetCoreCLI@2
+    displayName: Run dotnet restore
+    inputs:
+      command: restore
+  - task: DotNetCoreCLI@2
+    displayName: Run dotnet build
+    inputs:
+      command: build
+      arguments: '--configuration Debug --no-restore'
+  - task: DotNetCoreCLI@2
+    displayName: Execute unit tests
+    inputs:
+      command: test
+      arguments: '--no-build'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/App/Tests/LearningTerraform.BusinessLogic.UnitTests'
+
 - job: ApplyTerraform
   displayName: Apply Terraform
   steps:
@@ -19,7 +38,7 @@ jobs:
       ARM_CLIENT_SECRET: '$(Azure.ClientSecret)'
       ARM_SUBSCRIPTION_ID: '$(Azure.SubscriptionId)'
       ARM_TENANT_ID: '$(Azure.TenantId)'
-  
+
   - script: terraform apply -auto-approve
     workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform'
     displayName: 'Terraform - Apply'
