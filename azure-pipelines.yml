@@ -4,46 +4,54 @@ trigger:
 variables:
   - group: AzureCredentials
 
-pool:
-  vmImage: 'ubuntu-latest'
 
-jobs:
-- job: BuildAndTest
-  displayName: Build & Test
-  steps:
-  - task: DotNetCoreCLI@2
-    displayName: Run dotnet restore
-    inputs:
-      command: restore
-  - task: DotNetCoreCLI@2
-    displayName: Run dotnet build
-    inputs:
-      command: build
-      arguments: '--configuration Debug --no-restore'
-  - task: DotNetCoreCLI@2
-    displayName: Execute unit tests
-    inputs:
-      command: test
-      arguments: '--no-build'
-      workingDirectory: '$(System.DefaultWorkingDirectory)/App/Tests/LearningTerraform.BusinessLogic.UnitTests'
 
-- job: ApplyTerraform
-  displayName: Apply Terraform
-  steps:
-  - script: terraform init
-    workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform'
-    displayName: 'Terraform - Initialize'
-    env:
-      ARM_CLIENT_ID: '$(Azure.ClientId)'
-      ARM_CLIENT_SECRET: '$(Azure.ClientSecret)'
-      ARM_SUBSCRIPTION_ID: '$(Azure.SubscriptionId)'
-      ARM_TENANT_ID: '$(Azure.TenantId)'
+stages:
+- stage: BuildAndTest
+  displayName: Build & run pre-deployment tests
+  pool:
+    vmImage: 'ubuntu-latest'
 
-  - script: terraform apply -auto-approve
-    workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform'
-    displayName: 'Terraform - Apply'
-    env:
-      ARM_CLIENT_ID: '$(Azure.ClientId)'
-      ARM_CLIENT_SECRET: '$(Azure.ClientSecret)'
-      ARM_SUBSCRIPTION_ID: '$(Azure.SubscriptionId)'
-      ARM_TENANT_ID: '$(Azure.TenantId)'
+
+  jobs:
+  - job: BuildAndTest
+    displayName: Build & Test
+    steps:
+    - task: DotNetCoreCLI@2
+      displayName: Run dotnet restore
+      inputs:
+        command: restore
+        workingDirectory: '$(System.DefaultWorkingDirectory)/App'
+    - task: DotNetCoreCLI@2
+      displayName: Run dotnet build
+      inputs:
+        command: build
+        arguments: '--configuration Debug --no-restore'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/App'
+    - task: DotNetCoreCLI@2
+      displayName: Execute unit tests
+      inputs:
+        command: test
+        arguments: '--no-build'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/App/Tests/LearningTerraform.BusinessLogic.UnitTests'
+
+  - job: ApplyTerraform
+    displayName: Apply Terraform
+    steps:
+    - script: terraform init
+      workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform'
+      displayName: 'Terraform - Initialize'
+      env:
+        ARM_CLIENT_ID: '$(Azure.ClientId)'
+        ARM_CLIENT_SECRET: '$(Azure.ClientSecret)'
+        ARM_SUBSCRIPTION_ID: '$(Azure.SubscriptionId)'
+        ARM_TENANT_ID: '$(Azure.TenantId)'
+
+    - script: terraform apply -auto-approve
+      workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform'
+      displayName: 'Terraform - Apply'
+      env:
+        ARM_CLIENT_ID: '$(Azure.ClientId)'
+        ARM_CLIENT_SECRET: '$(Azure.ClientSecret)'
+        ARM_SUBSCRIPTION_ID: '$(Azure.SubscriptionId)'
+        ARM_TENANT_ID: '$(Azure.TenantId)'
