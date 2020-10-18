@@ -45,6 +45,7 @@ stages:
         docker ps -a
         ./wait-for-it.sh -h host.docker.internal -p 1433 -t 120
         docker ps -a
+        docker logs MSSQL
       displayName: Install tools
     # - task: ShellScript@2
     #   inputs:
