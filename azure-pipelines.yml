@@ -37,13 +37,12 @@ stages:
         docker run -d --name MSSQL --rm -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=$(DockerDbContainerPassword)' -e 'MSSQL_PID=Developer' -p 1433:1433 -d mcr.microsoft.com/mssql/server:2017-latest
       displayName: Create DB Container
     - script: |
-        wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
+        apt-get update & apt-get install -y wait-for-it
         dotnet tool install --global --version 3.1.9 dotnet-ef
         export PATH=$PATH:$HOME/.dotnet/tools
         . ~/.bashrc
-        chmod +rx wait-for-it.sh
         docker ps -a
-        ./wait-for-it.sh -h host.docker.internal -p 1433 -t 120
+        wait-for-it -h localhost -p 1433 -t 180
         docker ps -a
         docker logs MSSQL
       displayName: Install tools
