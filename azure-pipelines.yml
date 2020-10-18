@@ -21,13 +21,14 @@ stages:
       displayName: Run dotnet restore
       inputs:
         command: restore
-        workingDirectory: '$(System.DefaultWorkingDirectory)/App/LearningTerraform.sln'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/App/'
+        includeNuGetOrg: true
     - task: DotNetCoreCLI@2
       displayName: Run dotnet build
       inputs:
         command: build
         arguments: '--configuration Debug --no-restore'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/App/LearningTerraform.sln'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/App/'
     - task: DotNetCoreCLI@2
       displayName: Execute unit tests
       inputs:
