@@ -1,1 +1,1 @@
-dotnet tool install --global --version 3.1.8 dotnet-ef
+dotnet tool install --global --version 3.1.9 dotnet-ef
