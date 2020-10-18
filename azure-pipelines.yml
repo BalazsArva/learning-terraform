@@ -37,12 +37,12 @@ stages:
         docker run -d --name MSSQL --rm -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=$(DockerDbContainerPassword)' -e 'MSSQL_PID=Developer' -p 1433:1433 -d mcr.microsoft.com/mssql/server:2017-latest
       displayName: Create DB Container
     - script: |
-        apt-get update & apt-get install -y wait-for-it
+        sudo apt-get update & apt-get install -y wait-for-it
         dotnet tool install --global --version 3.1.9 dotnet-ef
         export PATH=$PATH:$HOME/.dotnet/tools
         . ~/.bashrc
         docker ps -a
-        wait-for-it -h localhost -p 1433 -t 180
+        sudo wait-for-it -h localhost -p 1433 -t 180
         docker ps -a
         docker logs MSSQL
       displayName: Install tools
