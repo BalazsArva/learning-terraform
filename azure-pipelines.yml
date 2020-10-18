@@ -21,22 +21,23 @@ stages:
       displayName: Run dotnet restore
       inputs:
         command: restore
-        workingDirectory: '$(System.DefaultWorkingDirectory)/App/'
+        projects: '$(System.DefaultWorkingDirectory)/App/LearningTerraform.sln'
         includeNuGetOrg: true
     - task: DotNetCoreCLI@2
       displayName: Run dotnet build
       inputs:
         command: build
         arguments: '--configuration Debug --no-restore'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/App/'
+        projects: '$(System.DefaultWorkingDirectory)/App/LearningTerraform.sln'
     - task: DotNetCoreCLI@2
       displayName: Execute unit tests
       inputs:
         command: test
         arguments: '--no-build'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/App/Tests/LearningTerraform.BusinessLogic.UnitTests'
+        projects: '$(System.DefaultWorkingDirectory)/App/LearningTerraform.sln'
 
   - job: ApplyTerraform
+    dependsOn: BuildAndTest
     # Temp only
     condition: false
     displayName: Apply Terraform
