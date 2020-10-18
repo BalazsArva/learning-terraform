@@ -37,13 +37,15 @@ stages:
         docker run -d --name MSSQL --rm -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=$(DockerDbContainerPassword)' -e 'MSSQL_PID=Developer' -p 1433:1433 -d mcr.microsoft.com/mssql/server:2017-latest
       displayName: Create DB Container
     - script: |
+        wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
         dotnet tool install --global --version 3.1.9 dotnet-ef
         export PATH=$PATH:$HOME/.dotnet/tools
         . ~/.bashrc
-      displayName: Install EF Core global tools
-    - script: |
-        wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
-        ./wait-for-it.sh -h=host.docker.internal -p=1433 -t=120
+      displayName: Install tools
+    - task: ShellScript@2
+      inputs:
+        scriptPath: '$(System.DefaultWorkingDirectory)/wait-for-it.sh'
+        args: '-h=host.docker.internal -p=1433 -t=120'
       displayName: Wait for DB Container
     - script: |
         dotnet ef database update -s ../LearningTerraform.Api
