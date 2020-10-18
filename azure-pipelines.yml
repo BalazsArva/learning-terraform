@@ -7,7 +7,6 @@ variables:
 pool:
   vmImage: 'ubuntu-latest'
 
-
 stages:
 - stage: BuildAndTest
   displayName: Build & run pre-deployment tests
@@ -33,6 +32,13 @@ stages:
         command: test
         arguments: '--no-build'
         projects: '$(System.DefaultWorkingDirectory)/App/Tests/LearningTerraform.BusinessLogic.UnitTests'
+    - script: |
+        echo $(DockerDbContainerPassword)
+        docker run -d --name MSSQL --rm -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=$(DockerDbContainerPassword)' -e 'MSSQL_PID=Developer' -p 1433:1433 -d mcr.microsoft.com/mssql/server:2017-latest
+      displayName: Run DB Container
+    - script: |
+        docker stop MSSQL
+      displayName: Remove DB Container
 
 - stage: ExecuteTerraform
   dependsOn: BuildAndTest
