@@ -14,6 +14,12 @@ stages:
   - job: BuildAndTest
     displayName: Build & Test
     steps:
+    - task: UseDotNet@2
+      displayName: Use .NET Core SDK
+      inputs:
+        packageType: sdk
+        version: 3.1
+        installationPath: $(Agent.ToolsDirectory)/dotnet
     - task: DotNetCoreCLI@2
       displayName: Run dotnet restore
       inputs:
@@ -37,7 +43,6 @@ stages:
         docker run -d --name MSSQL --rm -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=$(DockerDbContainerPassword)' -e 'MSSQL_PID=Developer' -p 1433:1433 -d mcr.microsoft.com/mssql/server:2017-latest
       displayName: Create DB Container
     - script: |
-        dotnet tool install --version 3.1.8 dotnet-ef
         dotnet ef database update -s ..\LearningTerraform.Api
       displayName: Migrate Database in Container
       workingDirectory: '$(System.DefaultWorkingDirectory)/App/Src/LearningTerraform.DataAccess.MsSql'
