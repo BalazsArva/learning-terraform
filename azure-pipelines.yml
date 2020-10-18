@@ -4,15 +4,13 @@ trigger:
 variables:
   - group: AzureCredentials
 
+pool:
+  vmImage: 'ubuntu-latest'
 
 
 stages:
 - stage: BuildAndTest
   displayName: Build & run pre-deployment tests
-  pool:
-    vmImage: 'ubuntu-latest'
-
-
   jobs:
   - job: BuildAndTest
     displayName: Build & Test
@@ -36,10 +34,11 @@ stages:
         arguments: '--no-build'
         projects: '$(System.DefaultWorkingDirectory)/App/Tests/LearningTerraform.BusinessLogic.UnitTests'
 
+- stage: ExecuteTerraform
+  dependsOn: BuildAndTest
+  condition: false
+  jobs:
   - job: ApplyTerraform
-    dependsOn: BuildAndTest
-    # Temp only
-    condition: false
     displayName: Apply Terraform
     steps:
     - script: terraform init
