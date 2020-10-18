@@ -43,7 +43,7 @@ stages:
       displayName: Install EF Core global tools
     - script: |
         wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh $(System.DefaultWorkingDirectory)/wait-for-it.sh
-        $(System.DefaultWorkingDirectory)/wait-for-it.sh
+        $(System.DefaultWorkingDirectory)/wait-for-it.sh -h=host.docker.internal -p=1433 -t=120
       displayName: Wait for DB Container
     - script: |
         dotnet ef database update -s ../LearningTerraform.Api
