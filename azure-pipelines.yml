@@ -42,7 +42,9 @@ stages:
         export PATH=$PATH:$HOME/.dotnet/tools
         . ~/.bashrc
         chmod +rx wait-for-it.sh
+        docker ps -a
         ./wait-for-it.sh -h host.docker.internal -p 1433 -t 120
+        docker ps -a
       displayName: Install tools
     # - task: ShellScript@2
     #   inputs:
