@@ -40,7 +40,7 @@ stages:
         dotnet tool install --global --version 3.1.9 dotnet-ef
         export PATH=$PATH:$HOME/.dotnet/tools
         . ~/.bashrc
-        dotnet ef database update -s ..\LearningTerraform.Api
+        dotnet ef database update -s ../LearningTerraform.Api
       displayName: Migrate Database in Container
       workingDirectory: '$(System.DefaultWorkingDirectory)/App/Src/LearningTerraform.DataAccess.MsSql'
       env:
