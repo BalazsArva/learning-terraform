@@ -12,10 +12,10 @@
 
 * [ ] Initial pipeline:
   
-  * Build application & execute unit tests
-  * Create container image
-  * Compose application, run pre-deployment tests
-  * Create container registry, push image to container registry (only if the pre-deployment tests succeeded)
+  * [x] Build application & execute unit tests
+  * [ ] Create container image
+  * [x] Compose application, run pre-deployment tests - note: instead of composing, the current version only hosts a test MSSQL in a container. The tests are run with the ASP.NET Core in-memory testing suite, without being deployed.
+  * [ ] Create container registry, push image to container registry (only if the pre-deployment tests succeeded)
 
 * [ ] Set up hosting for the application (initially without complicated stuff such as DB migration, rollback, backup, etc., just create something that will show something in the browser. Set up the infrastructure with terraform (container hosting, database, networks, etc.)
 
