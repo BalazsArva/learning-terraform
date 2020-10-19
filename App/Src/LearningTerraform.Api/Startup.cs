@@ -31,6 +31,8 @@ namespace LearningTerraform.Api
             services.AddHealthChecks();
             services.AddControllers(options => options.Filters.Add<EntityNotFoundExceptionFilterAttribute>());
 
+            System.Console.WriteLine(Configuration.GetConnectionString("Default"));
+
             services
                 .AddDbContext<DataContext>(
                     opts => opts.UseSqlServer(Configuration.GetConnectionString("Default")),
