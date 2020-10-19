@@ -27,14 +27,14 @@ stages:
         arguments: '--configuration Debug --no-restore'
         projects: '$(System.DefaultWorkingDirectory)/App'
     - task: DotNetCoreCLI@2
-      displayName: Execute unit tests
+      displayName: Run unit tests
       inputs:
         command: test
         arguments: '--no-build'
         projects: '$(System.DefaultWorkingDirectory)/App/Tests/LearningTerraform.BusinessLogic.UnitTests'
     - script: |
         echo $(DockerDbContainerPassword)
-        docker run -d --name MSSQL --rm -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=$(DockerDbContainerPassword)' -e 'MSSQL_PID=Developer' -p 1433:1433 -d mcr.microsoft.com/mssql/server:2017-latest
+        docker run -d --rm --name MSSQL -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=$(DockerDbContainerPassword)' -e 'MSSQL_PID=Developer' -p 1433:1433 -d mcr.microsoft.com/mssql/server:2017-latest
       displayName: Create DB Container
     - script: |
         wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
@@ -47,17 +47,20 @@ stages:
         docker ps -a
         docker logs MSSQL
       displayName: Install tools
-    # - task: ShellScript@2
-    #   inputs:
-    #     scriptPath: '$(System.DefaultWorkingDirectory)/wait-for-it.sh'
-    #     args: '-h host.docker.internal -p 1433 -t 120'
-    #   displayName: Wait for DB Container
     - script: |
         export PATH=$PATH:$HOME/.dotnet/tools
         . ~/.bashrc
         dotnet ef database update -s ../LearningTerraform.Api
       displayName: Migrate Database in Container
       workingDirectory: '$(System.DefaultWorkingDirectory)/App/Src/LearningTerraform.DataAccess.MsSql'
+      env:
+        ConnectionStrings__Default: 'Server=localhost,1433;Database=LearningTerraform;User Id=sa;password=$(DockerDbContainerPassword)'
+    - task: DotNetCoreCLI@2
+      displayName: Run pre-deployment integration tests
+      inputs:
+        command: test
+        arguments: '--no-build --filter "Category=PreDeployment"'
+        projects: '$(System.DefaultWorkingDirectory)/App/Tests/LearningTerraform.Api.IntegrationTests'
       env:
         ConnectionStrings__Default: 'Server=localhost,1433;Database=LearningTerraform;User Id=sa;password=$(DockerDbContainerPassword)'
     - script: |
