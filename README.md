@@ -13,7 +13,7 @@
 * [ ] Initial pipeline:
   
   * [x] Build application & execute unit tests
-  * [ ] Create container image
+  * [x] Create container image
   * [x] Compose application, run pre-deployment tests - note: instead of composing, the current version only hosts a test MSSQL in a container. The tests are run with the ASP.NET Core in-memory testing suite, without being deployed.
   * [ ] Create container registry, push image to container registry (only if the pre-deployment tests succeeded)
 
