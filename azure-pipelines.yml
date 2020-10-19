@@ -6,6 +6,9 @@ variables:
   - name: ContainerDbPort
     readonly: true
     value: 1433
+  - name: ContainerDbImage
+    readonly: true
+    value: mcr.microsoft.com/mssql/server:2017-latest
   - name: ContainerDbConnectionString
     readonly: true
     value: 'Server=localhost,$(ContainerDbPort);Database=LearningTerraform;User Id=sa;password=$(DockerDbContainerPassword)'
@@ -21,13 +24,13 @@ stages:
     displayName: Build & Test
     steps:
     - task: DotNetCoreCLI@2
-      displayName: Run dotnet restore
+      displayName: Restore packages
       inputs:
         command: restore
         projects: '$(System.DefaultWorkingDirectory)/App'
         includeNuGetOrg: true
     - task: DotNetCoreCLI@2
-      displayName: Run dotnet build
+      displayName: Build
       inputs:
         command: build
         arguments: '--configuration Debug --no-restore'
@@ -39,19 +42,19 @@ stages:
         arguments: '--no-build'
         projects: '$(System.DefaultWorkingDirectory)/App/Tests/LearningTerraform.BusinessLogic.UnitTests'
     - script: |
-        docker run -d --rm --name MSSQL -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=$(DockerDbContainerPassword)' -e 'MSSQL_PID=Developer' -p $(ContainerDbPort):1433 mcr.microsoft.com/mssql/server:2017-latest
+        docker run -d --rm --name MSSQL -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=$(DockerDbContainerPassword)' -e 'MSSQL_PID=Developer' -p $(ContainerDbPort):1433 $(ContainerDbImage)
       displayName: Create DB Container
       name: CreateDbContainer
     - script: |
         wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
         dotnet tool install --global --version 3.1.9 dotnet-ef
         chmod +rx wait-for-it.sh
-        ./wait-for-it.sh -h localhost -p $(ContainerDbPort) -t 180
       displayName: Install tools
       name: InstallTools
     - script: |
         export PATH=$PATH:$HOME/.dotnet/tools
         . ~/.bashrc
+        ./wait-for-it.sh -h localhost -p $(ContainerDbPort) -t 180
         dotnet ef database update -s ../LearningTerraform.Api
       displayName: Migrate Database in Container
       name: MigrateContainerDatabase
