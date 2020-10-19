@@ -49,12 +49,12 @@ stages:
         wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
         dotnet tool install --global --version 3.1.9 dotnet-ef
         chmod +rx wait-for-it.sh
+        ./wait-for-it.sh -h localhost -p $(ContainerDbPort) -t 180
       displayName: Install tools
       name: InstallTools
     - script: |
         export PATH=$PATH:$HOME/.dotnet/tools
         . ~/.bashrc
-        ./wait-for-it.sh -h localhost -p $(ContainerDbPort) -t 180
         dotnet ef database update -s ../LearningTerraform.Api
       displayName: Migrate Database in Container
       name: MigrateContainerDatabase
