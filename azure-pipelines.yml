@@ -85,7 +85,7 @@ stages:
         tags: learningterraformapi:$(Build.SourceVersion)
 
 - stage: ExecuteTerraform
-  dependsOn: BuildAndTest
+  dependsOn: BuildAndRunPreDeploymentTests
   condition: false
   jobs:
   - job: ApplyTerraform
