@@ -59,7 +59,7 @@ stages:
       displayName: Migrate Database in Container
       workingDirectory: '$(System.DefaultWorkingDirectory)/App/Src/LearningTerraform.DataAccess.MsSql'
       env:
-        ConnectionStrings__Default: 'Server=localhost:1433;Database=LearningTerraform;User Id=sa;password=$(DockerDbContainerPassword)'
+        ConnectionStrings__Default: 'Server=localhost,1433;Database=LearningTerraform;User Id=sa;password=$(DockerDbContainerPassword)'
     - script: |
         docker stop MSSQL
       displayName: Destroy DB Container
