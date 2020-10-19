@@ -75,6 +75,8 @@ stages:
       name: DestroyDbContainer
   - job: BuildAndPushDockerImage
     displayName: Build & push Docker image
+    dependsOn: BuildAndTest
+    condition: succeeded('BuildAndTest')
     steps:
     - task: Docker@2
       displayName: Build Docker image
