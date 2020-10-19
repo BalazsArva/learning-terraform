@@ -3,6 +3,12 @@ trigger:
 
 variables:
   - group: AzureCredentials
+  - name: ContainerDbPort
+    readonly: true
+    value: 1433
+  - name: ContainerDbConnectionString
+    readonly: true
+    value: 'Server=localhost,$(ContainerDbPort);Database=LearningTerraform;User Id=sa;password=$(DockerDbContainerPassword)'
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -33,28 +39,25 @@ stages:
         arguments: '--no-build'
         projects: '$(System.DefaultWorkingDirectory)/App/Tests/LearningTerraform.BusinessLogic.UnitTests'
     - script: |
-        echo $(DockerDbContainerPassword)
-        docker run -d --rm --name MSSQL -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=$(DockerDbContainerPassword)' -e 'MSSQL_PID=Developer' -p 1433:1433 -d mcr.microsoft.com/mssql/server:2017-latest
+        docker run -d --rm --name MSSQL -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=$(DockerDbContainerPassword)' -e 'MSSQL_PID=Developer' -p $(ContainerDbPort):1433 mcr.microsoft.com/mssql/server:2017-latest
       displayName: Create DB Container
+      name: CreateDbContainer
     - script: |
         wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
         dotnet tool install --global --version 3.1.9 dotnet-ef
-        export PATH=$PATH:$HOME/.dotnet/tools
-        . ~/.bashrc
         chmod +rx wait-for-it.sh
-        docker ps -a
-        ./wait-for-it.sh -h localhost -p 1433 -t 180
-        docker ps -a
-        docker logs MSSQL
+        ./wait-for-it.sh -h localhost -p $(ContainerDbPort) -t 180
       displayName: Install tools
+      name: InstallTools
     - script: |
         export PATH=$PATH:$HOME/.dotnet/tools
         . ~/.bashrc
         dotnet ef database update -s ../LearningTerraform.Api
       displayName: Migrate Database in Container
+      name: MigrateContainerDatabase
       workingDirectory: '$(System.DefaultWorkingDirectory)/App/Src/LearningTerraform.DataAccess.MsSql'
       env:
-        ConnectionStrings__Default: 'Server=localhost,1433;Database=LearningTerraform;User Id=sa;password=$(DockerDbContainerPassword)'
+        ConnectionStrings__Default: $(ContainerDbConnectionString)
     - task: DotNetCoreCLI@2
       displayName: Run pre-deployment integration tests
       inputs:
@@ -62,10 +65,11 @@ stages:
         arguments: '--no-build --filter "Category=PreDeployment"'
         projects: '$(System.DefaultWorkingDirectory)/App/Tests/LearningTerraform.Api.IntegrationTests'
       env:
-        ConnectionStrings__Default: 'Server=localhost,1433;Database=LearningTerraform;User Id=sa;password=$(DockerDbContainerPassword)'
+        ConnectionStrings__Default: $(ContainerDbConnectionString)
     - script: |
         docker stop MSSQL
       displayName: Destroy DB Container
+      name: DestroyDbContainer
 
 - stage: ExecuteTerraform
   dependsOn: BuildAndTest
