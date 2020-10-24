@@ -79,12 +79,23 @@ stages:
     condition: succeeded('BuildAndTest')
     steps:
     - task: Docker@2
+      displayName: Login to Azure Container Registry
+      inputs:
+        command: login
+        containerRegistry: 'AzureServiceConnection'
+
+    - task: Docker@2
       displayName: Build Docker image
       inputs:
-        command: build
+        command: buildAndPush
         buildContext: App/Src
         Dockerfile: App/Src/LearningTerraform.Api/Dockerfile
         tags: learningterraformapi:$(Build.SourceVersion)
+
+    - task: Docker@2
+      displayName: Log out  of Azure Container Registry
+      inputs:
+        command: logout
 
 - stage: ExecuteTerraform
   dependsOn: BuildAndRunPreDeploymentTests
