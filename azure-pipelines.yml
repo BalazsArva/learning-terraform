@@ -90,9 +90,9 @@ stages:
         command: buildAndPush
         buildContext: App/Src
         Dockerfile: App/Src/LearningTerraform.Api/Dockerfile
-        repository: DemoApplication
+        repository: learning-terraform-api
         containerRegistry: AzureServiceConnection
-        tags: learning-terraform-api:$(Build.SourceVersion)
+        tags: $(Build.SourceVersion)
 
     - task: Docker@2
       displayName: Log out  of Azure Container Registry
