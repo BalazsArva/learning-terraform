@@ -83,7 +83,7 @@ stages:
     displayName: Apply Terraform
     steps:
     - script: terraform init
-      workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/Predeploy'
       displayName: 'Terraform - Initialize'
       env:
         ARM_CLIENT_ID: '$(Azure.ClientId)'
