@@ -5,7 +5,7 @@ resource "azurerm_container_registry" "acr" {
   sku = "standard"
 
   tags = {
-    "environment": "development"
+    "environment": "common"
     "terraform": "true"
   }
 }

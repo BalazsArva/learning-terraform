@@ -73,10 +73,37 @@ stages:
         docker stop MSSQL
       displayName: Destroy DB Container
       name: DestroyDbContainer
+
+- stage: BuildAndPushDockerImage
+  displayName: Apply Terraform (pre-deployment)
+  dependsOn: BuildAndRunPreDeploymentTests
+  condition: succeeded('BuildAndRunPreDeploymentTests')
+  jobs:
+  - job: ApplyTerraform
+    displayName: Apply Terraform
+    steps:
+    - script: terraform init
+      workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform'
+      displayName: 'Terraform - Initialize'
+      env:
+        ARM_CLIENT_ID: '$(Azure.ClientId)'
+        ARM_CLIENT_SECRET: '$(Azure.ClientSecret)'
+        ARM_SUBSCRIPTION_ID: '$(Azure.SubscriptionId)'
+        ARM_TENANT_ID: '$(Azure.TenantId)'
+
+    - script: terraform plan | terraform apply
+      workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/Predeploy'
+      displayName: 'Terraform - Plan & Apply'
+      env:
+        ARM_CLIENT_ID: '$(Azure.ClientId)'
+        ARM_CLIENT_SECRET: '$(Azure.ClientSecret)'
+        ARM_SUBSCRIPTION_ID: '$(Azure.SubscriptionId)'
+        ARM_TENANT_ID: '$(Azure.TenantId)'
+
   - job: BuildAndPushDockerImage
     displayName: Build & push Docker image
-    dependsOn: BuildAndTest
-    condition: succeeded('BuildAndTest')
+    dependsOn: ApplyTerraform
+    condition: succeeded('ApplyTerraform')
     steps:
     - task: Docker@2
       displayName: Login to Azure Container Registry
@@ -95,31 +122,6 @@ stages:
         tags: $(Build.SourceVersion)
 
     - task: Docker@2
-      displayName: Log out  of Azure Container Registry
+      displayName: Log out of Azure Container Registry
       inputs:
         command: logout
-
-- stage: ExecuteTerraform
-  dependsOn: BuildAndRunPreDeploymentTests
-  condition: false
-  jobs:
-  - job: ApplyTerraform
-    displayName: Apply Terraform
-    steps:
-    - script: terraform init
-      workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform'
-      displayName: 'Terraform - Initialize'
-      env:
-        ARM_CLIENT_ID: '$(Azure.ClientId)'
-        ARM_CLIENT_SECRET: '$(Azure.ClientSecret)'
-        ARM_SUBSCRIPTION_ID: '$(Azure.SubscriptionId)'
-        ARM_TENANT_ID: '$(Azure.TenantId)'
-
-    - script: terraform apply -auto-approve
-      workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform'
-      displayName: 'Terraform - Apply'
-      env:
-        ARM_CLIENT_ID: '$(Azure.ClientId)'
-        ARM_CLIENT_SECRET: '$(Azure.ClientSecret)'
-        ARM_SUBSCRIPTION_ID: '$(Azure.SubscriptionId)'
-        ARM_TENANT_ID: '$(Azure.TenantId)'
