@@ -21,7 +21,7 @@
       "output": null,
       "outputType": "Swagger2",
       "assemblyPaths": [
-        "bin\\Debug\\netcoreapp3.1\\LearningTerraform.Api.dll"
+        "bin/Debug/netcoreapp3.1/LearningTerraform.Api.dll"
       ],
       "referencePaths": []
     }
@@ -78,7 +78,7 @@
       "handleReferences": false,
       "generateImmutableArrayProperties": false,
       "generateImmutableDictionaryProperties": false,
-      "output": "..\\LearningTerraform.ApiClient\\Client.g.cs"
+      "output": "../LearningTerraform.ApiClient/Client.g.cs"
     }
   }
 }

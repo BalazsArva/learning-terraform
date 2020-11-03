@@ -1,20 +1,20 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
 WORKDIR /app
-EXPOSE 80
 EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["LearningTerraform.Api/LearningTerraform.Api.csproj", "LearningTerraform.Api/"]
+ENV IsDockerBuild="true"
+COPY ["LearningTerraform.Api/LearningTerraform.Api.csproj",                           "LearningTerraform.Api/"]
+COPY ["LearningTerraform.BusinessLogic/LearningTerraform.BusinessLogic.csproj",       "LearningTerraform.BusinessLogic/"]
+COPY ["LearningTerraform.DataAccess.MsSql/LearningTerraform.DataAccess.MsSql.csproj", "LearningTerraform.DataAccess.MsSql/"]
 RUN dotnet restore "LearningTerraform.Api/LearningTerraform.Api.csproj"
 COPY . .
 WORKDIR "/src/LearningTerraform.Api"
-RUN dotnet build "LearningTerraform.Api.csproj" -c Release -o /app/build
+RUN dotnet build "LearningTerraform.Api.csproj" -c Release --no-restore
 
 FROM build AS publish
-RUN dotnet publish "LearningTerraform.Api.csproj" -c Release -o /app/publish
+RUN dotnet publish "LearningTerraform.Api.csproj" -c Release --no-build -o /app/publish
 
 FROM base AS final
 WORKDIR /app
