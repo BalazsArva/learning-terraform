@@ -12,6 +12,9 @@ variables:
   - name: ContainerDbConnectionString
     readonly: true
     value: 'Server=localhost,$(ContainerDbPort);Database=LearningTerraform;User Id=sa;password=$(DockerDbContainerPassword)'
+  - name: IsMaster
+    readonly: true
+    value: $[eq(variables['Build.SourceBranch'], 'refs/heads/master')]
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -114,9 +117,16 @@ stages:
     - task: Docker@2
       displayName: Build Docker image
       inputs:
-        command: buildAndPush
+        command: build
         buildContext: App/Src
         Dockerfile: App/Src/LearningTerraform.Api/Dockerfile
+        tags: $(Build.SourceVersion)
+
+    - task: Docker@2
+      displayName: Push Docker image
+      condition: $(IsMaster)
+      inputs:
+        command: push
         repository: learning-terraform-api
         containerRegistry: AzureServiceConnection
         tags: $(Build.SourceVersion)
