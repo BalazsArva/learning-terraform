@@ -91,7 +91,9 @@ stages:
         ARM_SUBSCRIPTION_ID: '$(Azure.SubscriptionId)'
         ARM_TENANT_ID: '$(Azure.TenantId)'
 
-    - script: terraform plan | terraform apply -auto-approve
+    - script: |
+        terraform plan
+        terraform apply
       workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/Predeploy'
       displayName: 'Terraform - Plan & Apply'
       env:
