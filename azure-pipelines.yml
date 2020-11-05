@@ -80,13 +80,13 @@ stages:
       displayName: Destroy DB Container
       name: DestroyDbContainer
 
-- stage: BuildAndPushDockerImage
-  displayName: Apply Terraform (pre-deployment)
+- stage: CreateDockerImage
+  displayName: Create Docker image
   dependsOn: BuildAndRunPreDeploymentTests
   condition: succeeded('BuildAndRunPreDeploymentTests')
   jobs:
   - job: ApplyTerraform
-    displayName: Apply Terraform
+    displayName: Apply pre-deployment Terraform changes
     steps:
     - script: terraform init
       workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/Predeploy'
