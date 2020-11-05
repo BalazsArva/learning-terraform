@@ -17,7 +17,7 @@ variables:
     value: $(Build.BuildId)
   - name: IsMaster
     readonly: true
-    value: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+    value: $[ eq(variables['Build.SourceBranch'], 'refs/heads/master') ]
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -130,7 +130,7 @@ stages:
 
     - task: Docker@2
       displayName: Push Docker image
-      condition: IsMaster
+      condition: $(IsMaster)
       inputs:
         command: push
         containerRegistry: AzureServiceConnection
