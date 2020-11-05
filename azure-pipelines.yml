@@ -14,7 +14,7 @@ variables:
     value: 'learning-terraform-api'
   - name: ImageTag
     readonly: true
-    value: variables['Build.BuildId']
+    value: $(Build.BuildId)
   - name: IsMaster
     readonly: true
     value: eq(variables['Build.SourceBranch'], 'refs/heads/master')
