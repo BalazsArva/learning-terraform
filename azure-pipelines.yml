@@ -123,7 +123,7 @@ stages:
 
     - task: Docker@2
       displayName: Push Docker image
-      condition: $[variables.IsMaster]
+      condition: variables.IsMaster
       inputs:
         command: push
         repository: learning-terraform-api
