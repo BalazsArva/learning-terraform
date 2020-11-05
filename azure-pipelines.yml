@@ -130,7 +130,7 @@ stages:
 
     - task: Docker@2
       displayName: Push Docker image
-      condition: eq(variables.IsMaster, true))
+      condition: eq(variables.IsMaster, true)
       inputs:
         command: push
         containerRegistry: AzureServiceConnection
