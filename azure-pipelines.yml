@@ -9,6 +9,12 @@ variables:
   - name: ContainerDbConnectionString
     readonly: true
     value: 'Server=localhost,$(ContainerDbPort);Database=LearningTerraform;User Id=sa;password=$(DockerDbContainerPassword)'
+  - name: ImageName
+    readonly: true
+    value: 'learning-terraform-api'
+  - name: ImageTag
+    readonly: true
+    value: variables['Build.BuildId']
   - name: IsMaster
     readonly: true
     value: eq(variables['Build.SourceBranch'], 'refs/heads/master')
@@ -119,16 +125,17 @@ stages:
         command: build
         buildContext: App/Src
         Dockerfile: App/Src/LearningTerraform.Api/Dockerfile
-        tags: $(Build.SourceVersion)
+        repository: $(ImageName)
+        tags: $(ImageTag)
 
     - task: Docker@2
       displayName: Push Docker image
       condition: variables.IsMaster
       inputs:
         command: push
-        repository: learning-terraform-api
         containerRegistry: AzureServiceConnection
-        tags: $(Build.SourceVersion)
+        repository: $(ImageName)
+        tags: $(ImageTag)
 
     - task: Docker@2
       displayName: Log out of Azure Container Registry
