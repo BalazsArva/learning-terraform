@@ -161,7 +161,7 @@ stages:
         ARM_TENANT_ID: '$(Azure.TenantId)'
 
     - script: |
-        terraform plan -out=tfplan_test -var 'image_tag=$(ImageTag)'
+        terraform plan -out=tfplan_test -var 'image_tag=$(ImageTag)' -var 'image_registry_username=$(Azure.ClientId)' -var 'image_registry_password=$(Azure.ClientSecret)'
         terraform apply "tfplan_test"
       workingDirectory: Terraform/Postdeploy
       displayName: Terraform - Plan & Apply

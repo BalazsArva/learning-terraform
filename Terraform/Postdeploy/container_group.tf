@@ -7,6 +7,15 @@ variable "image_tag" {
   type = string
 }
 
+variable "image_registry_username" {
+  type = string
+}
+
+variable "image_registry_password" {
+  type      = string
+  sensitive = true
+}
+
 resource "azurerm_container_group" "app" {
   name                = "learning-terraform-api"
   location            = "North Europe"
@@ -17,7 +26,7 @@ resource "azurerm_container_group" "app" {
 
   container {
     name   = "learning-terraform-api"
-    image  = "${data.azurerm_container_registry.acr.login_server}/learning-terraform-api:${var.image_tag}"
+    image  = "learning-terraform-api:${var.image_tag}"
     cpu    = "0.5"
     memory = "1.5"
 
@@ -25,6 +34,12 @@ resource "azurerm_container_group" "app" {
       port     = 443
       protocol = "TCP"
     }
+  }
+
+  image_registry_credential {
+    server   = data.azurerm_container_registry.acr.login_server
+    username = var.image_registry_username
+    password = var.image_registry_password
   }
 
   tags = {
