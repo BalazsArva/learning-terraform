@@ -61,7 +61,7 @@ stages:
     - script: |
         export PATH=$PATH:$HOME/.dotnet/tools
         . ~/.bashrc
-        dotnet ef database update -s ../LearningTerraform.Api
+        dotnet ef database update -s ../LearningTerraform.Api --no-build
       displayName: Migrate Database in Container
       name: MigrateContainerDatabase
       workingDirectory: '$(System.DefaultWorkingDirectory)/App/Src/LearningTerraform.DataAccess.MsSql'
