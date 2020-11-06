@@ -162,7 +162,7 @@ stages:
 
     - script: |
         terraform plan -out=tfplan_test
-        terraform apply "tfplan_test"
+        terraform apply "tfplan_test" -var 'image_tag=$(ImageTag)'
       workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/Postdeploy'
       displayName: 'Terraform - Plan & Apply'
       env:
