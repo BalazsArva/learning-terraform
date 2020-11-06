@@ -12,8 +12,7 @@ variable "image_registry_username" {
 }
 
 variable "image_registry_password" {
-  type      = string
-  sensitive = true
+  type = string
 }
 
 resource "azurerm_container_group" "app" {
