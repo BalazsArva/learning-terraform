@@ -25,7 +25,7 @@ resource "azurerm_container_group" "app" {
 
   container {
     name   = "learning-terraform-api"
-    image  = "learning-terraform-api:${var.image_tag}"
+    image  = "${data.azurerm_container_registry.acr.login_server}/learning-terraform-api:${var.image_tag}"
     cpu    = "0.5"
     memory = "1.5"
 
