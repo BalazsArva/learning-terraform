@@ -141,3 +141,32 @@ stages:
       displayName: Log out of Azure Container Registry
       inputs:
         command: logout
+
+- stage: DeployTest
+  displayName: Deploy to Test
+  dependsOn: CreateDockerImage
+  # condition: and(succeeded('CreateDockerImage'), eq(variables.IsMaster, true))
+  condition: succeeded('CreateDockerImage')
+  jobs:
+  - job: ApplyTerraform
+    displayName: Apply Terraform changes
+    steps:
+    - script: terraform init
+      workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/Postdeploy'
+      displayName: 'Terraform - Initialize'
+      env:
+        ARM_CLIENT_ID: '$(Azure.ClientId)'
+        ARM_CLIENT_SECRET: '$(Azure.ClientSecret)'
+        ARM_SUBSCRIPTION_ID: '$(Azure.SubscriptionId)'
+        ARM_TENANT_ID: '$(Azure.TenantId)'
+
+    - script: |
+        terraform plan -out=tfplan_test
+        terraform apply "tfplan_test"
+      workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/Postdeploy'
+      displayName: 'Terraform - Plan & Apply'
+      env:
+        ARM_CLIENT_ID: '$(Azure.ClientId)'
+        ARM_CLIENT_SECRET: '$(Azure.ClientSecret)'
+        ARM_SUBSCRIPTION_ID: '$(Azure.SubscriptionId)'
+        ARM_TENANT_ID: '$(Azure.TenantId)'

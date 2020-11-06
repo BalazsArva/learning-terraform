@@ -3,6 +3,10 @@ data "azurerm_container_registry" "acr" {
   resource_group_name = "LearningTerraform"
 }
 
+variable "image_tag" {
+  type = string
+}
+
 resource "azurerm_container_group" "app" {
   name                = "learning-terraform-api"
   location            = "North Europe"
@@ -13,7 +17,7 @@ resource "azurerm_container_group" "app" {
 
   container {
     name   = "learning-terraform-api"
-    image  = "${data.azurerm_container_registry.acr.login_server}/learning-terraform-api"
+    image  = "${data.azurerm_container_registry.acr.login_server}/learning-terraform-api:${var.image_tag}"
     cpu    = "0.5"
     memory = "1.5"
 
