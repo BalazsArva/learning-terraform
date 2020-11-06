@@ -130,7 +130,9 @@ stages:
 
     - task: Docker@2
       displayName: Push Docker image
-      condition: eq(variables.IsMaster, true)
+      # condition: eq(variables.IsMaster, true)
+      # TODO: Remove later. Remember that by removing this, deployment will fail if it is not being run from master.
+      condition: true
       inputs:
         command: push
         containerRegistry: AzureServiceConnection
