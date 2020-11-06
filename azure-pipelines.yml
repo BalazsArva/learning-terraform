@@ -98,8 +98,8 @@ stages:
         ARM_TENANT_ID: '$(Azure.TenantId)'
 
     - script: |
-        terraform plan
-        terraform apply
+        terraform plan -out=tfplan
+        terraform apply "tfplan"
       workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/Predeploy'
       displayName: 'Terraform - Plan & Apply'
       env:
