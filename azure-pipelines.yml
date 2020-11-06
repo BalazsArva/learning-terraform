@@ -33,14 +33,14 @@ stages:
       displayName: Restore packages
       inputs:
         command: restore
-        projects: App/
+        projects: App/LearningTerraform.sln
         includeNuGetOrg: true
     - task: DotNetCoreCLI@2
       displayName: Build
       inputs:
         command: build
         arguments: '--configuration Debug --no-restore'
-        projects: App/
+        projects: App/LearningTerraform.sln
     - task: DotNetCoreCLI@2
       displayName: Run unit tests
       inputs:
