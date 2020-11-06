@@ -33,20 +33,20 @@ stages:
       displayName: Restore packages
       inputs:
         command: restore
-        projects: '$(System.DefaultWorkingDirectory)/App'
+        projects: App/
         includeNuGetOrg: true
     - task: DotNetCoreCLI@2
       displayName: Build
       inputs:
         command: build
         arguments: '--configuration Debug --no-restore'
-        projects: '$(System.DefaultWorkingDirectory)/App'
+        projects: App/
     - task: DotNetCoreCLI@2
       displayName: Run unit tests
       inputs:
         command: test
         arguments: '--no-build'
-        projects: '$(System.DefaultWorkingDirectory)/App/Tests/LearningTerraform.BusinessLogic.UnitTests'
+        projects: App/Tests/LearningTerraform.BusinessLogic.UnitTests
     - script: |
         docker run -d --rm --name MSSQL -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=$(DockerDbContainerPassword)' -e 'MSSQL_PID=Developer' -p $(ContainerDbPort):1433 $(ContainerDbImage)
       displayName: Create DB Container
@@ -55,7 +55,7 @@ stages:
         wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
         dotnet tool install --global --version 3.1.9 dotnet-ef
         chmod +rx wait-for-it.sh
-        ./wait-for-it.sh -h localhost -p $(ContainerDbPort) -t 180
+        ./wait-for-it.sh -h localhost -p ${{ ContainerDbPort }} -t 180
       displayName: Install tools
       name: InstallTools
     - script: |
@@ -64,7 +64,7 @@ stages:
         dotnet ef database update -s ../LearningTerraform.Api --no-build
       displayName: Migrate Database in Container
       name: MigrateContainerDatabase
-      workingDirectory: '$(System.DefaultWorkingDirectory)/App/Src/LearningTerraform.DataAccess.MsSql'
+      workingDirectory: App/Src/LearningTerraform.DataAccess.MsSql
       env:
         ConnectionStrings__Default: $(ContainerDbConnectionString)
     - task: DotNetCoreCLI@2
@@ -72,7 +72,7 @@ stages:
       inputs:
         command: test
         arguments: '--no-build --filter "Category=PreDeployment"'
-        projects: '$(System.DefaultWorkingDirectory)/App/Tests/LearningTerraform.Api.IntegrationTests'
+        projects: App/Tests/LearningTerraform.Api.IntegrationTests
       env:
         ConnectionStrings__Default: $(ContainerDbConnectionString)
     - script: |
@@ -89,8 +89,8 @@ stages:
     displayName: Apply pre-deployment Terraform changes
     steps:
     - script: terraform init
-      workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/Predeploy'
-      displayName: 'Terraform - Initialize'
+      workingDirectory: Terraform/Predeploy
+      displayName: Terraform - Initialize
       env:
         ARM_CLIENT_ID: '$(Azure.ClientId)'
         ARM_CLIENT_SECRET: '$(Azure.ClientSecret)'
@@ -100,8 +100,8 @@ stages:
     - script: |
         terraform plan -out=tfplan
         terraform apply "tfplan"
-      workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/Predeploy'
-      displayName: 'Terraform - Plan & Apply'
+      workingDirectory: Terraform/Predeploy
+      displayName: Terraform - Plan & Apply
       env:
         ARM_CLIENT_ID: '$(Azure.ClientId)'
         ARM_CLIENT_SECRET: '$(Azure.ClientSecret)'
@@ -152,7 +152,7 @@ stages:
     displayName: Apply Terraform changes
     steps:
     - script: terraform init
-      workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/Postdeploy'
+      workingDirectory: Terraform/Postdeploy
       displayName: 'Terraform - Initialize'
       env:
         ARM_CLIENT_ID: '$(Azure.ClientId)'
@@ -163,8 +163,8 @@ stages:
     - script: |
         terraform plan -out=tfplan_test -var 'image_tag=$(ImageTag)'
         terraform apply "tfplan_test"
-      workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/Postdeploy'
-      displayName: 'Terraform - Plan & Apply'
+      workingDirectory: Terraform/Postdeploy
+      displayName: Terraform - Plan & Apply
       env:
         ARM_CLIENT_ID: '$(Azure.ClientId)'
         ARM_CLIENT_SECRET: '$(Azure.ClientSecret)'
