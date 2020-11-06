@@ -1,6 +1,3 @@
-trigger:
-  - master
-
 variables:
   - group: AzureCredentials
   - name: ContainerDbPort
@@ -12,6 +9,15 @@ variables:
   - name: ContainerDbConnectionString
     readonly: true
     value: 'Server=localhost,$(ContainerDbPort);Database=LearningTerraform;User Id=sa;password=$(DockerDbContainerPassword)'
+  - name: ImageName
+    readonly: true
+    value: 'learning-terraform-api'
+  - name: ImageTag
+    readonly: true
+    value: $(Build.BuildId)
+  - name: IsMaster
+    readonly: true
+    value: $[ eq(variables['Build.SourceBranch'], 'refs/heads/master') ]
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -74,13 +80,13 @@ stages:
       displayName: Destroy DB Container
       name: DestroyDbContainer
 
-- stage: BuildAndPushDockerImage
-  displayName: Apply Terraform (pre-deployment)
+- stage: CreateDockerImage
+  displayName: Create Docker image
   dependsOn: BuildAndRunPreDeploymentTests
   condition: succeeded('BuildAndRunPreDeploymentTests')
   jobs:
   - job: ApplyTerraform
-    displayName: Apply Terraform
+    displayName: Apply pre-deployment Terraform changes
     steps:
     - script: terraform init
       workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/Predeploy'
@@ -91,7 +97,9 @@ stages:
         ARM_SUBSCRIPTION_ID: '$(Azure.SubscriptionId)'
         ARM_TENANT_ID: '$(Azure.TenantId)'
 
-    - script: terraform plan | terraform apply -auto-approve
+    - script: |
+        terraform plan
+        terraform apply
       workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/Predeploy'
       displayName: 'Terraform - Plan & Apply'
       env:
@@ -114,12 +122,20 @@ stages:
     - task: Docker@2
       displayName: Build Docker image
       inputs:
-        command: buildAndPush
+        command: build
         buildContext: App/Src
         Dockerfile: App/Src/LearningTerraform.Api/Dockerfile
-        repository: learning-terraform-api
+        repository: $(ImageName)
+        tags: $(ImageTag)
+
+    - task: Docker@2
+      displayName: Push Docker image
+      condition: eq(variables.IsMaster, true)
+      inputs:
+        command: push
         containerRegistry: AzureServiceConnection
-        tags: $(Build.SourceVersion)
+        repository: $(ImageName)
+        tags: $(ImageTag)
 
     - task: Docker@2
       displayName: Log out of Azure Container Registry
