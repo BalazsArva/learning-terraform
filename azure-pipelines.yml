@@ -161,8 +161,8 @@ stages:
         ARM_TENANT_ID: '$(Azure.TenantId)'
 
     - script: |
-        terraform plan -out=tfplan_test
-        terraform apply "tfplan_test" -var 'image_tag=$(ImageTag)'
+        terraform plan -out=tfplan_test -var 'image_tag=$(ImageTag)'
+        terraform apply "tfplan_test"
       workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/Postdeploy'
       displayName: 'Terraform - Plan & Apply'
       env:
