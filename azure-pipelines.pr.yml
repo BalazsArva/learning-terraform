@@ -24,6 +24,9 @@ pool:
 
 pr:
   autoCancel: true
+  branches:
+    include:
+      - master
 
 stages:
 - stage: BuildAndRunPreDeploymentTests

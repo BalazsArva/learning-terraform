@@ -22,6 +22,11 @@ variables:
 pool:
   vmImage: 'ubuntu-latest'
 
+trigger:
+  branches:
+    include:
+      - master
+
 stages:
 - stage: BuildAndRunPreDeploymentTests
   displayName: Build & run pre-deployment tests
