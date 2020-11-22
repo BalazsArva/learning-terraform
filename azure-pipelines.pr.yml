@@ -22,7 +22,8 @@ variables:
 pool:
   vmImage: 'ubuntu-latest'
 
-trigger:
+pr:
+  autoCancel: true
   branches:
     include:
       - master
@@ -90,12 +91,15 @@ stages:
   dependsOn: BuildAndRunPreDeploymentTests
   condition: succeeded('BuildAndRunPreDeploymentTests')
   jobs:
-  - job: ApplyTerraform
-    displayName: Apply pre-deployment Terraform changes
+
+  # Plan Terraform changes to validate the changes.
+  # Could separate into a distinct pipeline later and filter on directory for TF changes.
+  - job: PlanTerraform
+    displayName: Plan pre-deployment Terraform changes
     steps:
     - script: terraform init
       workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/Predeploy'
-      displayName: 'Terraform - Initialize'
+      displayName: Terraform - Initialize
       env:
         ARM_CLIENT_ID: '$(Azure.ClientId)'
         ARM_CLIENT_SECRET: '$(Azure.ClientSecret)'
@@ -104,19 +108,20 @@ stages:
 
     - script: |
         terraform plan
-        terraform apply
       workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/Predeploy'
-      displayName: 'Terraform - Plan & Apply'
+      displayName: Terraform - Plan
       env:
         ARM_CLIENT_ID: '$(Azure.ClientId)'
         ARM_CLIENT_SECRET: '$(Azure.ClientSecret)'
         ARM_SUBSCRIPTION_ID: '$(Azure.SubscriptionId)'
         ARM_TENANT_ID: '$(Azure.TenantId)'
 
-  - job: BuildAndPushDockerImage
-    displayName: Build & push Docker image
-    dependsOn: ApplyTerraform
-    condition: succeeded('ApplyTerraform')
+  # If the image is non-trivial, it's worth building it (but not pushing it)
+  # to make sure the image creation won't fail after merge.
+  - job: BuildDockerImage
+    displayName: Build Docker image
+    dependsOn: PlanTerraform
+    condition: succeeded('PlanTerraform')
     steps:
     - task: Docker@2
       displayName: Login to Azure Container Registry
@@ -130,15 +135,6 @@ stages:
         command: build
         buildContext: App/Src
         Dockerfile: App/Src/LearningTerraform.Api/Dockerfile
-        repository: $(ImageName)
-        tags: $(ImageTag)
-
-    - task: Docker@2
-      displayName: Push Docker image
-      condition: eq(variables.IsMaster, true)
-      inputs:
-        command: push
-        containerRegistry: AzureServiceConnection
         repository: $(ImageName)
         tags: $(ImageTag)
 
