@@ -88,8 +88,8 @@ stages:
       displayName: Destroy DB Container
       name: DestroyDbContainer
 
-- stage: CreateDockerImage
-  displayName: Create Docker image
+- stage: PlanTerraformChanges
+  displayName: Plan Terraform changes
   pool:
     vmImage: 'ubuntu-latest'
   jobs:
@@ -128,8 +128,6 @@ stages:
   # to make sure the image creation won't fail after merge.
   - job: BuildDockerImage
     displayName: Build Docker image
-    dependsOn: PlanTerraform
-    condition: succeeded('PlanTerraform')
     steps:
     - task: Docker@2
       displayName: Login to Azure Container Registry
