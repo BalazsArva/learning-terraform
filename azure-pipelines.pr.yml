@@ -30,6 +30,8 @@ pr:
 
 stages:
 - stage: BuildAndRunPreDeploymentTests
+  pool:
+    vmImage: 'ubuntu-latest'
   displayName: Build & run pre-deployment tests
   jobs:
   - job: BuildAndTest
@@ -88,8 +90,8 @@ stages:
 
 - stage: CreateDockerImage
   displayName: Create Docker image
-  dependsOn: BuildAndRunPreDeploymentTests
-  condition: succeeded('BuildAndRunPreDeploymentTests')
+  pool:
+    vmImage: 'ubuntu-latest'
   jobs:
 
   # Plan Terraform changes to validate the changes.
@@ -115,6 +117,12 @@ stages:
         ARM_CLIENT_SECRET: '$(Azure.ClientSecret)'
         ARM_SUBSCRIPTION_ID: '$(Azure.SubscriptionId)'
         ARM_TENANT_ID: '$(Azure.TenantId)'
+
+- stage: CreateDockerImage
+  displayName: Create Docker image
+  pool:
+    vmImage: 'ubuntu-latest'
+  jobs:
 
   # If the image is non-trivial, it's worth building it (but not pushing it)
   # to make sure the image creation won't fail after merge.
