@@ -30,9 +30,10 @@ pr:
 
 stages:
 - stage: BuildAndRunPreDeploymentTests
+  displayName: Build & run pre-deployment tests
+  dependsOn: []
   pool:
     vmImage: 'ubuntu-latest'
-  displayName: Build & run pre-deployment tests
   jobs:
   - job: BuildAndTest
     displayName: Build & Test
@@ -90,6 +91,7 @@ stages:
 
 - stage: PlanTerraformChanges
   displayName: Plan Terraform changes
+  dependsOn: []
   pool:
     vmImage: 'ubuntu-latest'
   jobs:
@@ -119,6 +121,7 @@ stages:
         ARM_TENANT_ID: '$(Azure.TenantId)'
 
 - stage: CreateDockerImage
+  dependsOn: []
   displayName: Create Docker image
   pool:
     vmImage: 'ubuntu-latest'
