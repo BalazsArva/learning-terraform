@@ -20,7 +20,7 @@ variables:
     value: $[ eq(variables['Build.SourceBranch'], 'refs/heads/master') ]
 
 pool:
-  name: SelfHostedAgentPool
+  vmImage: 'ubuntu-latest'
 
 pr:
   autoCancel: true
