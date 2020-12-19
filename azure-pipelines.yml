@@ -21,8 +21,6 @@ trigger:
 stages:
 - stage: CreateDockerImage
   displayName: Create Docker image
-  dependsOn: BuildAndRunPreDeploymentTests
-  condition: succeeded('BuildAndRunPreDeploymentTests')
   jobs:
   - job: ApplyTerraform
     displayName: Apply pre-deployment Terraform changes
