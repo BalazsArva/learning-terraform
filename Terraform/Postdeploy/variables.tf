@@ -26,7 +26,6 @@ variable "image_registry_password" {
 }
 
 locals {
-  resource_group_name       = "LearningTerraform"
   location                  = "North Europe"
 
   api_container_group_name  = "learning-terraform-api"

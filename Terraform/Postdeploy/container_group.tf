@@ -1,12 +1,12 @@
 data "azurerm_container_registry" "acr" {
   name                = "exampleapp"
-  resource_group_name = local.resource_group_name
+  resource_group_name = "LearningTerraform"
 }
 resource "azurerm_container_group" "app" {
   name                = local.api_container_group_name
   location            = local.location
-  resource_group_name = local.resource_group_name
   dns_name_label      = local.api_container_group_name
+  resource_group_name = "LearningTerraform"
   ip_address_type     = "public"
   os_type             = "Linux"
 
