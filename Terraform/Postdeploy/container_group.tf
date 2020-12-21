@@ -20,6 +20,10 @@ resource "azurerm_container_group" "app" {
       port     = 443
       protocol = "TCP"
     }
+
+    environment_variables = {
+      "ASPNETCORE_URLS" = "https://+:443"
+    }
   }
 
   image_registry_credential {
