@@ -21,8 +21,13 @@ resource "azurerm_container_group" "app" {
       protocol = "TCP"
     }
 
+    ports {
+      port     = 80
+      protocol = "TCP"
+    }
+
     environment_variables = {
-      "ASPNETCORE_URLS" = "https://+:443"
+      "ASPNETCORE_URLS" = "https://+:443;http://+:80"
     }
   }
 
