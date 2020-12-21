@@ -27,7 +27,7 @@ resource "azurerm_container_group" "app" {
     }
 
     environment_variables = {
-      "ASPNETCORE_URLS" = "https://+:443;http://+:80"
+      "ASPNETCORE_URLS" = "http://+:80"
     }
   }
 
