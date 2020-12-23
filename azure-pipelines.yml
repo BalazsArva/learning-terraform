@@ -91,7 +91,7 @@ stages:
     displayName: Apply Terraform changes
     steps:
     - script: terraform init
-      workingDirectory: Terraform/Postdeploy
+      workingDirectory: Terraform/Deploy
       displayName: 'Terraform - Initialize'
       env:
         ARM_CLIENT_ID: '$(Azure.ClientId)'
@@ -102,7 +102,7 @@ stages:
     - script: |
         terraform plan -out=tfplan_test -var 'image_tag=$(ImageTag)' -var 'image_registry_username=$(Azure.ClientId)' -var 'image_registry_password=$(Azure.ClientSecret)'
         terraform apply "tfplan_test"
-      workingDirectory: Terraform/Postdeploy
+      workingDirectory: Terraform/Deploy
       displayName: Terraform - Plan & Apply
       env:
         ARM_CLIENT_ID: '$(Azure.ClientId)'
