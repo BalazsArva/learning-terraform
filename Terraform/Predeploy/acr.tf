@@ -1,8 +1,8 @@
 resource "azurerm_container_registry" "acr" {
-  name = "exampleapp"
+  name                = "exampleapp"
   resource_group_name = "LearningTerraform"
-  location = "North Europe"
-  sku = "standard"
+  location            = local.location
+  sku                 = "standard"
 
   tags = {
     "environment": "common"

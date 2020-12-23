@@ -1,14 +1,5 @@
 variables:
   - group: AzureCredentials
-  - name: ContainerDbPort
-    readonly: true
-    value: 1433
-  - name: ContainerDbImage
-    readonly: true
-    value: mcr.microsoft.com/mssql/server:2017-latest
-  - name: ContainerDbConnectionString
-    readonly: true
-    value: 'Server=localhost,$(ContainerDbPort);Database=LearningTerraform;User Id=sa;password=$(DockerDbContainerPassword)'
   - name: ImageName
     readonly: true
     value: 'learning-terraform-api'
@@ -28,74 +19,15 @@ trigger:
       - master
 
 stages:
-- stage: BuildAndRunPreDeploymentTests
-  displayName: Build & run pre-deployment tests
-  jobs:
-  - job: BuildAndTest
-    displayName: Build & Test
-    steps:
-    - task: DotNetCoreCLI@2
-      displayName: Restore packages
-      inputs:
-        command: restore
-        projects: '$(System.DefaultWorkingDirectory)/App'
-        includeNuGetOrg: true
-    - task: DotNetCoreCLI@2
-      displayName: Build
-      inputs:
-        command: build
-        arguments: '--configuration Debug --no-restore'
-        projects: '$(System.DefaultWorkingDirectory)/App'
-    - task: DotNetCoreCLI@2
-      displayName: Run unit tests
-      inputs:
-        command: test
-        arguments: '--no-build'
-        projects: '$(System.DefaultWorkingDirectory)/App/Tests/LearningTerraform.BusinessLogic.UnitTests'
-    - script: |
-        docker run -d --rm --name MSSQL -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=$(DockerDbContainerPassword)' -e 'MSSQL_PID=Developer' -p $(ContainerDbPort):1433 $(ContainerDbImage)
-      displayName: Create DB Container
-      name: CreateDbContainer
-    - script: |
-        wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
-        dotnet tool install --global --version 3.1.9 dotnet-ef
-        chmod +rx wait-for-it.sh
-        ./wait-for-it.sh -h localhost -p $(ContainerDbPort) -t 180
-      displayName: Install tools
-      name: InstallTools
-    - script: |
-        export PATH=$PATH:$HOME/.dotnet/tools
-        . ~/.bashrc
-        dotnet ef database update -s ../LearningTerraform.Api
-      displayName: Migrate Database in Container
-      name: MigrateContainerDatabase
-      workingDirectory: '$(System.DefaultWorkingDirectory)/App/Src/LearningTerraform.DataAccess.MsSql'
-      env:
-        ConnectionStrings__Default: $(ContainerDbConnectionString)
-    - task: DotNetCoreCLI@2
-      displayName: Run pre-deployment integration tests
-      inputs:
-        command: test
-        arguments: '--no-build --filter "Category=PreDeployment"'
-        projects: '$(System.DefaultWorkingDirectory)/App/Tests/LearningTerraform.Api.IntegrationTests'
-      env:
-        ConnectionStrings__Default: $(ContainerDbConnectionString)
-    - script: |
-        docker stop MSSQL
-      displayName: Destroy DB Container
-      name: DestroyDbContainer
-
 - stage: CreateDockerImage
   displayName: Create Docker image
-  dependsOn: BuildAndRunPreDeploymentTests
-  condition: succeeded('BuildAndRunPreDeploymentTests')
   jobs:
   - job: ApplyTerraform
     displayName: Apply pre-deployment Terraform changes
     steps:
     - script: terraform init
-      workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/Predeploy'
-      displayName: 'Terraform - Initialize'
+      workingDirectory: Terraform/Predeploy
+      displayName: Terraform - Initialize
       env:
         ARM_CLIENT_ID: '$(Azure.ClientId)'
         ARM_CLIENT_SECRET: '$(Azure.ClientSecret)'
@@ -103,10 +35,10 @@ stages:
         ARM_TENANT_ID: '$(Azure.TenantId)'
 
     - script: |
-        terraform plan
-        terraform apply
-      workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/Predeploy'
-      displayName: 'Terraform - Plan & Apply'
+        terraform plan -out=tfplan
+        terraform apply "tfplan"
+      workingDirectory: Terraform/Predeploy
+      displayName: Terraform - Plan & Apply
       env:
         ARM_CLIENT_ID: '$(Azure.ClientId)'
         ARM_CLIENT_SECRET: '$(Azure.ClientSecret)'
@@ -135,7 +67,6 @@ stages:
 
     - task: Docker@2
       displayName: Push Docker image
-      condition: eq(variables.IsMaster, true)
       inputs:
         command: push
         containerRegistry: AzureServiceConnection
@@ -146,3 +77,31 @@ stages:
       displayName: Log out of Azure Container Registry
       inputs:
         command: logout
+
+- stage: DeployTest
+  displayName: Deploy to Test
+  dependsOn: CreateDockerImage
+  condition: succeeded('CreateDockerImage')
+  jobs:
+  - job: ApplyTerraform
+    displayName: Apply Terraform changes
+    steps:
+    - script: terraform init
+      workingDirectory: Terraform/Deploy
+      displayName: 'Terraform - Initialize'
+      env:
+        ARM_CLIENT_ID: '$(Azure.ClientId)'
+        ARM_CLIENT_SECRET: '$(Azure.ClientSecret)'
+        ARM_SUBSCRIPTION_ID: '$(Azure.SubscriptionId)'
+        ARM_TENANT_ID: '$(Azure.TenantId)'
+
+    - script: |
+        terraform plan -out=tfplan_test -var 'image_tag=$(ImageTag)' -var 'image_registry_username=$(Azure.ClientId)' -var 'image_registry_password=$(Azure.ClientSecret)'
+        terraform apply "tfplan_test"
+      workingDirectory: Terraform/Deploy
+      displayName: Terraform - Plan & Apply
+      env:
+        ARM_CLIENT_ID: '$(Azure.ClientId)'
+        ARM_CLIENT_SECRET: '$(Azure.ClientSecret)'
+        ARM_SUBSCRIPTION_ID: '$(Azure.SubscriptionId)'
+        ARM_TENANT_ID: '$(Azure.TenantId)'

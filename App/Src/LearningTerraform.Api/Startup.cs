@@ -50,7 +50,7 @@ namespace LearningTerraform.Api
 
             app.UseMiddleware<ApplicationVersionHeadersMiddleware>();
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 
