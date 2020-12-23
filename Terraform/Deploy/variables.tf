@@ -25,10 +25,31 @@ variable "image_registry_password" {
   }
 }
 
+variable "db_server_admin_login" {
+  type = string
+
+  validation {
+    condition = length(var.db_server_admin_login) > 0
+    error_message = "DB server admin login is mandatory."
+  }
+}
+
+variable "db_server_admin_password" {
+  type = string
+
+  validation {
+    condition = length(var.db_server_admin_password) > 0
+    error_message = "DB server admin password is mandatory."
+  }
+}
+
 locals {
   location                  = "North Europe"
 
   api_container_group_name  = "learning-terraform-api"
   api_container_name        = "learning-terraform-api"
   api_image_name            = "learning-terraform-api"
+
+  database_server_name      = "learning-terraform-db"
+  database_name             = "learning-terraform-db"
 }
