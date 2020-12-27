@@ -15,16 +15,15 @@ namespace LearningTerraform.DataAccess.MsSql.Database
             this.context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<string> CreateAsync(string ownerId, Pet pet)
+        public async Task<string> CreateAsync(CreatePetDto pet)
         {
-            var ownerEntity = await context.Owners.AsNoTracking().FirstOrDefaultAsync(x => x.PublicId == ownerId);
-
-            var petEntity = new Entities.Pet
+            if (pet is null)
             {
-                Name = pet.Name,
-                OwnerId = ownerEntity.Id,
-                PublicId = Guid.NewGuid().ToString("n"),
-            };
+                throw new ArgumentNullException(nameof(pet));
+            }
+
+            var ownerEntity = await context.Owners.AsNoTracking().FirstOrDefaultAsync(x => x.PublicId == pet.OwnerId);
+            var petEntity = new Entities.Pet(ownerEntity.Id, Guid.NewGuid().ToString("n"), pet.Name);
 
             context.Pets.Add(petEntity);
 
@@ -40,11 +39,7 @@ namespace LearningTerraform.DataAccess.MsSql.Database
                 return null;
             }
 
-            return new Pet
-            {
-                Id = entity.PublicId,
-                Name = entity.Name,
-            };
+            return new(entity.PublicId, entity.Name);
         }
     }
 }

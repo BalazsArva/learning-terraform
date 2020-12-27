@@ -5,6 +5,6 @@ namespace LearningTerraform.BusinessLogic.DataAccess.Abstractions
 {
     public interface IOwnerWriteRepository
     {
-        Task<string> CreateAsync(Owner owner);
+        Task<string> CreateAsync(CreateOwnerDto owner);
     }
 }

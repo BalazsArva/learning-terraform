@@ -24,28 +24,11 @@ namespace LearningTerraform.BusinessLogic.UnitTests.Stubs
             owners[owner.Id] = owner;
         }
 
-        public Task<string> CreateAsync(Owner owner)
+        public Task<string> CreateAsync(CreateOwnerDto owner)
         {
             var id = Guid.NewGuid().ToString("n");
 
-            owners[id] = new Owner
-            {
-                Id = id,
-                FirstName = owner.FirstName,
-                LastName = owner.LastName,
-            };
-
-            foreach (var pet in owner.Pets)
-            {
-                var petEntity = new Pet
-                {
-                    Name = pet.Name,
-                    Id = pet.Id ?? Guid.NewGuid().ToString("n"),
-                };
-
-                pets[petEntity.Id] = petEntity;
-                owners[id].Pets.Add(petEntity);
-            }
+            owners[id] = new Owner(id, owner.FirstName, owner.LastName, Array.Empty<Pet>());
 
             return Task.FromResult(id);
         }

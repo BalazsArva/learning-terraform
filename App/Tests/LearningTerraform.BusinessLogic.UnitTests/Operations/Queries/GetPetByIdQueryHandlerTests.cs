@@ -9,6 +9,7 @@ namespace LearningTerraform.BusinessLogic.UnitTests.Operations.Queries
     public class GetPetByIdQueryHandlerTests : OperationsTestsBase
     {
         private const string DefaultId = "DefaultId";
+        private const string DefaultName = "DefaultName";
 
         private GetPetByIdQueryHandler handler;
 
@@ -37,7 +38,7 @@ namespace LearningTerraform.BusinessLogic.UnitTests.Operations.Queries
         [Test]
         public async Task HandleAsync_PetExists_ReturnsPet()
         {
-            PetRepositoryMock.Object.Add(new Domain.Pet { Id = DefaultId });
+            PetRepositoryMock.Object.Add(new Domain.Pet(DefaultId, DefaultName));
 
             var result = await handler.HandleAsync(new GetPetByIdQuery { Id = DefaultId });
 

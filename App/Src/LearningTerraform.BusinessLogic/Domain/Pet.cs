@@ -1,9 +1,4 @@
 namespace LearningTerraform.BusinessLogic.Domain
 {
-    public class Pet
-    {
-        public string Id { get; set; }
-
-        public string Name { get; set; }
-    }
+    public record Pet(string Id, string Name);
 }
