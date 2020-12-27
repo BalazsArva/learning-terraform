@@ -59,7 +59,7 @@ stages:
       name: CreateDbContainer
     - script: |
         wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
-        dotnet tool install --global --version 3.1.9 dotnet-ef
+        dotnet tool install --global --version 5.0.1 dotnet-ef
         chmod +rx wait-for-it.sh
         ./wait-for-it.sh -h localhost -p $(ContainerDbPort) -t 180
       displayName: Install tools
