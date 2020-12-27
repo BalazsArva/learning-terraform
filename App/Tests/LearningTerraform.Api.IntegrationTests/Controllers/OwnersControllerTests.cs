@@ -75,17 +75,8 @@ namespace LearningTerraform.Api.IntegrationTests.Controllers
                     PublicId = DefaultOwnerPublicId,
                 };
 
-                var petEntity1 = new Pet
-                {
-                    Name = DefaultPetName1,
-                    PublicId = DefaultPetPublicId1,
-                };
-
-                var petEntity2 = new Pet
-                {
-                    Name = DefaultPetName2,
-                    PublicId = DefaultPetPublicId2,
-                };
+                var petEntity1 = new Pet(ownerDbEntity, DefaultPetPublicId1, DefaultPetName1);
+                var petEntity2 = new Pet(ownerDbEntity, DefaultPetPublicId2, DefaultPetName2);
 
                 ownerDbEntity.Pets.Add(petEntity1);
                 ownerDbEntity.Pets.Add(petEntity2);

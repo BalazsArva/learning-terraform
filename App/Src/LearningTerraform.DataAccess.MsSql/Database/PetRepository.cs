@@ -18,13 +18,7 @@ namespace LearningTerraform.DataAccess.MsSql.Database
         public async Task<string> CreateAsync(string ownerId, Pet pet)
         {
             var ownerEntity = await context.Owners.AsNoTracking().FirstOrDefaultAsync(x => x.PublicId == ownerId);
-
-            var petEntity = new Entities.Pet
-            {
-                Name = pet.Name,
-                OwnerId = ownerEntity.Id,
-                PublicId = Guid.NewGuid().ToString("n"),
-            };
+            var petEntity = new Entities.Pet(ownerEntity.Id, Guid.NewGuid().ToString("n"), pet.Name);
 
             context.Pets.Add(petEntity);
 

@@ -1,14 +1,20 @@
 namespace LearningTerraform.DataAccess.MsSql.Entities
 {
-    public class Pet
+    public record Pet
     {
-        public int Id { get; init; }
+        public Pet(Owner owner, string publicId, string name)
+            => (Owner, PublicId, Name) = (owner, publicId, name);
 
-        public string PublicId { get; init; }
+        public Pet(int ownerId, string publicId, string name)
+            => (OwnerId, PublicId, Name) = (ownerId, publicId, name);
 
-        public int OwnerId { get; init; }
+        public int Id { get; }
 
-        public string Name { get; init; }
+        public string PublicId { get; }
+
+        public int OwnerId { get; }
+
+        public string Name { get; }
 
         public virtual Owner Owner { get; }
     }
