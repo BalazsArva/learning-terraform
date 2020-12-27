@@ -2,15 +2,18 @@ using System.Collections.Generic;
 
 namespace LearningTerraform.DataAccess.MsSql.Entities
 {
-    public class Owner
+    public record Owner
     {
-        public int Id { get; init; }
+        public Owner(string publicId, string firstName, string lastName)
+            => (PublicId, FirstName, LastName) = (publicId, firstName, lastName);
 
-        public string PublicId { get; init; }
+        public int Id { get; }
 
-        public string FirstName { get; init; }
+        public string PublicId { get; }
 
-        public string LastName { get; init; }
+        public string FirstName { get; }
+
+        public string LastName { get; }
 
         public virtual ICollection<Pet> Pets { get; } = new List<Pet>();
     }

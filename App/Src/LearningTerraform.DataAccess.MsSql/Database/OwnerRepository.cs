@@ -18,12 +18,7 @@ namespace LearningTerraform.DataAccess.MsSql.Database
 
         public Task<string> CreateAsync(Owner owner)
         {
-            var entity = new Entities.Owner
-            {
-                FirstName = owner.FirstName,
-                LastName = owner.LastName,
-                PublicId = Guid.NewGuid().ToString("n"),
-            };
+            var entity = new Entities.Owner(Guid.NewGuid().ToString("n"), owner.FirstName, owner.LastName);
 
             context.Owners.Add(entity);
 

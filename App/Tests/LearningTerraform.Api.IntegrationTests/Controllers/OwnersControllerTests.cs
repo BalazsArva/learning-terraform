@@ -38,12 +38,7 @@ namespace LearningTerraform.Api.IntegrationTests.Controllers
         {
             using (var preparationContext = CreateDataContext())
             {
-                var ownerDbEntity = new Owner
-                {
-                    FirstName = DefaultOwnerFirstName,
-                    LastName = DefaultOwnerLastName,
-                    PublicId = DefaultOwnerPublicId,
-                };
+                var ownerDbEntity = new Owner(DefaultOwnerPublicId, DefaultOwnerFirstName, DefaultOwnerLastName);
 
                 preparationContext.Owners.Add(ownerDbEntity);
 
@@ -68,12 +63,7 @@ namespace LearningTerraform.Api.IntegrationTests.Controllers
         {
             using (var preparationContext = CreateDataContext())
             {
-                var ownerDbEntity = new Owner
-                {
-                    FirstName = DefaultOwnerFirstName,
-                    LastName = DefaultOwnerLastName,
-                    PublicId = DefaultOwnerPublicId,
-                };
+                var ownerDbEntity = new Owner(DefaultOwnerPublicId, DefaultOwnerFirstName, DefaultOwnerLastName);
 
                 var petEntity1 = new Pet(ownerDbEntity, DefaultPetPublicId1, DefaultPetName1);
                 var petEntity2 = new Pet(ownerDbEntity, DefaultPetPublicId2, DefaultPetName2);
