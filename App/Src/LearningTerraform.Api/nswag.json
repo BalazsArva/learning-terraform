@@ -1,5 +1,5 @@
 {
-  "runtime": "NetCore31",
+  "runtime": "Net50",
   "documentGenerator": {
     "webApiToOpenApi": {
       "controllerNames": [],
@@ -21,7 +21,7 @@
       "output": null,
       "outputType": "Swagger2",
       "assemblyPaths": [
-        "bin/Debug/netcoreapp3.1/LearningTerraform.Api.dll"
+        "bin/Debug/net5.0/LearningTerraform.Api.dll"
       ],
       "referencePaths": []
     }
