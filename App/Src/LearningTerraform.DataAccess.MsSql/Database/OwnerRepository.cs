@@ -16,8 +16,13 @@ namespace LearningTerraform.DataAccess.MsSql.Database
             this.context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public Task<string> CreateAsync(Owner owner)
+        public Task<string> CreateAsync(CreateOwnerDto owner)
         {
+            if (owner is null)
+            {
+                throw new ArgumentNullException(nameof(owner));
+            }
+
             var entity = new Entities.Owner(Guid.NewGuid().ToString("n"), owner.FirstName, owner.LastName);
 
             context.Owners.Add(entity);
@@ -45,18 +50,9 @@ namespace LearningTerraform.DataAccess.MsSql.Database
                 .Where(x => x.OwnerId == entity.Id)
                 .ToListAsync();
 
-            var pets = petEntities.Select(x => new Pet(x.PublicId, x.Name));
+            var pets = petEntities.Select(x => new Pet(x.PublicId, x.Name)).ToList();
 
-            var result = new Owner
-            {
-                FirstName = entity.FirstName,
-                LastName = entity.LastName,
-                Id = entity.PublicId,
-            };
-
-            result.Pets.AddRange(pets);
-
-            return result;
+            return new Owner(entity.PublicId, entity.FirstName, entity.LastName, pets);
         }
     }
 }

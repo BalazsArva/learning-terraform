@@ -22,11 +22,7 @@ namespace LearningTerraform.BusinessLogic.Operations.Commands.CreateOwner
 
             using var uow = unitOfWorkFactory.Create();
 
-            var ownerId = await uow.OwnerWriteRepository.CreateAsync(new Domain.Owner
-            {
-                FirstName = command.FirstName,
-                LastName = command.LastName,
-            });
+            var ownerId = await uow.OwnerWriteRepository.CreateAsync(new Domain.CreateOwnerDto(command.FirstName, command.LastName));
 
             await uow.SaveChangesAsync();
 

@@ -13,6 +13,8 @@ namespace LearningTerraform.BusinessLogic.UnitTests.Operations.Commands
     {
         private const string DefaultName = "DefaultName";
         private const string DefaultOwnerId = "DefaultOwnerId";
+        private const string DefaultOwnerFirstName = "DefaultOwnerFirstName";
+        private const string DefaultOwnerLastName = "DefaultOwnerLastName";
 
         private CreatePetCommandHandler handler;
 
@@ -59,7 +61,7 @@ namespace LearningTerraform.BusinessLogic.UnitTests.Operations.Commands
                 OwnerId = DefaultOwnerId,
             };
 
-            OwnerRepositoryMock.Object.Add(new Domain.Owner { Id = DefaultOwnerId });
+            OwnerRepositoryMock.Object.Add(new Domain.Owner(DefaultOwnerId, DefaultOwnerFirstName, DefaultOwnerLastName, Array.Empty<Domain.Pet>()));
 
             var petId = await handler.HandleAsync(command);
 

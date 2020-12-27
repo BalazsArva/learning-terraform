@@ -9,6 +9,8 @@ namespace LearningTerraform.BusinessLogic.UnitTests.Operations.Queries
     public class GetOwnerByIdQueryHandlerTests : OperationsTestsBase
     {
         private const string DefaultId = "DefaultId";
+        private const string DefaultFirstName = "DefaultFirstName";
+        private const string DefaultLastName = "DefaultLastName";
 
         private GetOwnerByIdQueryHandler handler;
 
@@ -37,7 +39,7 @@ namespace LearningTerraform.BusinessLogic.UnitTests.Operations.Queries
         [Test]
         public async Task HandleAsync_OwnerExists_ReturnsOwner()
         {
-            OwnerRepositoryMock.Object.Add(new Domain.Owner { Id = DefaultId, });
+            OwnerRepositoryMock.Object.Add(new Domain.Owner(DefaultId, DefaultFirstName, DefaultLastName, Array.Empty<Domain.Pet>()));
 
             var result = await handler.HandleAsync(new GetOwnerByIdQuery { Id = DefaultId });
 
