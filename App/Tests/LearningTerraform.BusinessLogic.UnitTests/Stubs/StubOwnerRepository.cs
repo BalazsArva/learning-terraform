@@ -37,11 +37,7 @@ namespace LearningTerraform.BusinessLogic.UnitTests.Stubs
 
             foreach (var pet in owner.Pets)
             {
-                var petEntity = new Pet
-                {
-                    Name = pet.Name,
-                    Id = pet.Id ?? Guid.NewGuid().ToString("n"),
-                };
+                var petEntity = new Pet(pet.Id ?? Guid.NewGuid().ToString("n"), pet.Name);
 
                 pets[petEntity.Id] = petEntity;
                 owners[id].Pets.Add(petEntity);

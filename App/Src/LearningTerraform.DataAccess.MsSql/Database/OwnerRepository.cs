@@ -50,11 +50,7 @@ namespace LearningTerraform.DataAccess.MsSql.Database
                 .Where(x => x.OwnerId == entity.Id)
                 .ToListAsync();
 
-            var pets = petEntities.Select(x => new Pet
-            {
-                Id = x.PublicId,
-                Name = x.Name,
-            });
+            var pets = petEntities.Select(x => new Pet(x.PublicId, x.Name));
 
             var result = new Owner
             {

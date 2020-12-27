@@ -22,15 +22,11 @@ namespace LearningTerraform.BusinessLogic.UnitTests.Stubs
             pets[pet.Id] = pet;
         }
 
-        public Task<string> CreateAsync(string ownerId, Pet pet)
+        public Task<string> CreateAsync(CreatePetDto pet)
         {
             var id = Guid.NewGuid().ToString("n");
 
-            pets[id] = new Pet
-            {
-                Id = id,
-                Name = pet.Name
-            };
+            pets[id] = new Pet(id, pet.Name);
 
             return Task.FromResult(id);
         }

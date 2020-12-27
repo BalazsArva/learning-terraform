@@ -5,6 +5,6 @@ namespace LearningTerraform.BusinessLogic.DataAccess.Abstractions
 {
     public interface IPetWriteRepository
     {
-        Task<string> CreateAsync(string ownerId, Pet pet);
+        Task<string> CreateAsync(CreatePetDto pet);
     }
 }

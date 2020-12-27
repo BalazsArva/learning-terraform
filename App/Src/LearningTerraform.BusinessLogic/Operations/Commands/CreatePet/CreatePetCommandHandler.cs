@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using LearningTerraform.BusinessLogic.DataAccess.Abstractions;
+using LearningTerraform.BusinessLogic.Domain;
 using LearningTerraform.BusinessLogic.Exceptions;
 
 namespace LearningTerraform.BusinessLogic.Operations.Commands.CreatePet
@@ -28,10 +29,7 @@ namespace LearningTerraform.BusinessLogic.Operations.Commands.CreatePet
                 throw new EntityNotFoundException($"No owner with Id='{command.OwnerId}' could be found.");
             }
 
-            var petId = await uow.PetWriteRepository.CreateAsync(command.OwnerId, new Domain.Pet
-            {
-                Name = command.Name,
-            });
+            var petId = await uow.PetWriteRepository.CreateAsync(new CreatePetDto(command.OwnerId, command.Name));
 
             await uow.SaveChangesAsync();
 
