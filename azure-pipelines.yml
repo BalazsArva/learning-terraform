@@ -98,6 +98,8 @@ stages:
     - script: |
         terraform plan -out=tfplan_test -var 'image_tag=$(ImageTag)' -var 'image_registry_username=$(Azure.ClientId)' -var 'image_registry_password=$(Azure.ClientSecret)' -var 'db_server_admin_login=$(Azure.DbServer.AdminLogin)' -var 'db_server_admin_password=$(Azure.DbServer.AdminPassword)'
         terraform apply "tfplan_test"
+        sql_server_fqdn=eval terraform output -raw sql_server_fqdn
+        echo "##vso[task.setvariable variable=SqlServerFqdn]$sql_server_fqdn"
       workingDirectory: Terraform/Predeploy
       displayName: Terraform - Plan & Apply
       env:
@@ -106,10 +108,21 @@ stages:
         ARM_SUBSCRIPTION_ID: '$(Azure.SubscriptionId)'
         ARM_TENANT_ID: '$(Azure.TenantId)'
 
-  - job: ApplyTerraform
-    displayName: Apply Terraform changes
+  - job: MigrateDatabase
+    displayName: Migrate SQL database
     dependsOn: ApplyTerraformPredeploy
     condition: succeeded('ApplyTerraformPredeploy')
+    steps:
+    - script: dotnet ef database update -s ../LearningTerraform.Api
+      workingDirectory: App/Src/LearningTerraform.DataAccess.MsSql
+      displayName: Apply EF migrations
+      env:
+        ASPNETCORE_ConnectionStrings__Default: 'Server=tcp:$(SqlServerFqdn),1433;Initial Catalog=learning-terraform-db;Persist Security Info=False;User ID=$(Azure.DbServer.AdminLogin);Password=$(Azure.DbServer.AdminPassword);MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+
+  - job: ApplyTerraform
+    displayName: Apply Terraform changes
+    dependsOn: MigrateDatabase
+    condition: succeeded('MigrateDatabase')
     steps:
     - script: terraform init
       workingDirectory: Terraform/Deploy
