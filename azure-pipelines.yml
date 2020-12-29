@@ -122,7 +122,7 @@ stages:
       workingDirectory: App/Src/LearningTerraform.DataAccess.MsSql
       displayName: Apply EF migrations
       env:
-        ASPNETCORE_ConnectionStrings__Default: 'Server=tcp:$(SqlServerFqdn),1433;Initial Catalog=learning-terraform-db;Persist Security Info=False;User ID=$(Azure.DbServer.AdminLogin);Password=$(Azure.DbServer.AdminPassword);MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+        ConnectionStrings__Default: 'Server=tcp:$(SqlServerFqdn),1433;Initial Catalog=learning-terraform-db;Persist Security Info=False;User ID=$(Azure.DbServer.AdminLogin);Password=$(Azure.DbServer.AdminPassword);MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
 
   - job: ApplyTerraform
     displayName: Apply Terraform changes
