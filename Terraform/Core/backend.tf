@@ -3,6 +3,6 @@ terraform {
     resource_group_name  = "LearningTerraform"
     storage_account_name = "learningterraform200910"
     container_name       = "terraformstate"
-    key                  = "common.terraform.tfstate"
+    key                  = "terraform.common.tfstate"
   }
 }
