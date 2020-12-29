@@ -113,7 +113,9 @@ stages:
     dependsOn: ApplyTerraformPredeploy
     condition: succeeded('ApplyTerraformPredeploy')
     steps:
-    - script: dotnet ef database update -s ../LearningTerraform.Api
+    - script: |
+        dotnet tool install --global --version 5.0.1 dotnet-ef
+        dotnet ef database update -s ../LearningTerraform.Api
       workingDirectory: App/Src/LearningTerraform.DataAccess.MsSql
       displayName: Apply EF migrations
       env:
