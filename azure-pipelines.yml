@@ -26,7 +26,7 @@ stages:
     displayName: Apply pre-deployment Terraform changes
     steps:
     - script: terraform init
-      workingDirectory: Terraform/Predeploy
+      workingDirectory: Terraform/Core
       displayName: Terraform - Initialize
       env:
         ARM_CLIENT_ID: '$(Azure.ClientId)'
@@ -37,7 +37,7 @@ stages:
     - script: |
         terraform plan -out=tfplan
         terraform apply "tfplan"
-      workingDirectory: Terraform/Predeploy
+      workingDirectory: Terraform/Core
       displayName: Terraform - Plan & Apply
       env:
         ARM_CLIENT_ID: '$(Azure.ClientId)'

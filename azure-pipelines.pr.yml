@@ -99,7 +99,7 @@ stages:
     displayName: Plan pre-deployment Terraform changes
     steps:
     - script: terraform init
-      workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/Predeploy'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/Core'
       displayName: Terraform - Initialize
       env:
         ARM_CLIENT_ID: '$(Azure.ClientId)'
@@ -109,7 +109,7 @@ stages:
 
     - script: |
         terraform plan
-      workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/Predeploy'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/Core'
       displayName: Terraform - Plan
       env:
         ARM_CLIENT_ID: '$(Azure.ClientId)'
