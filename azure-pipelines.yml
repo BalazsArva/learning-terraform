@@ -118,6 +118,7 @@ stages:
     - script: |
         export PATH=$PATH:$HOME/.dotnet/tools
         . ~/.bashrc
+        echo $(SqlServerFqdn)
         dotnet ef database update -s ../LearningTerraform.Api
       workingDirectory: App/Src/LearningTerraform.DataAccess.MsSql
       displayName: Apply EF migrations
