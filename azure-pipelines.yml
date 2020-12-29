@@ -23,7 +23,7 @@ stages:
   displayName: Create Docker image
   jobs:
   - job: ApplyTerraform
-    displayName: Apply pre-deployment Terraform changes
+    displayName: Apply core Terraform changes
     steps:
     - script: terraform init
       workingDirectory: Terraform/Core
@@ -83,8 +83,33 @@ stages:
   dependsOn: CreateDockerImage
   condition: succeeded('CreateDockerImage')
   jobs:
+  - job: ApplyTerraformPredeploy
+    displayName: Apply pre-deployment Terraform changes
+    steps:
+    - script: terraform init
+      workingDirectory: Terraform/Predeploy
+      displayName: 'Terraform - Initialize'
+      env:
+        ARM_CLIENT_ID: '$(Azure.ClientId)'
+        ARM_CLIENT_SECRET: '$(Azure.ClientSecret)'
+        ARM_SUBSCRIPTION_ID: '$(Azure.SubscriptionId)'
+        ARM_TENANT_ID: '$(Azure.TenantId)'
+
+    - script: |
+        terraform plan -out=tfplan_test -var 'image_tag=$(ImageTag)' -var 'image_registry_username=$(Azure.ClientId)' -var 'image_registry_password=$(Azure.ClientSecret)' -var 'db_server_admin_login=$(Azure.DbServer.AdminLogin)' -var 'db_server_admin_password=$(Azure.DbServer.AdminPassword)'
+        terraform apply "tfplan_test"
+      workingDirectory: Terraform/Predeploy
+      displayName: Terraform - Plan & Apply
+      env:
+        ARM_CLIENT_ID: '$(Azure.ClientId)'
+        ARM_CLIENT_SECRET: '$(Azure.ClientSecret)'
+        ARM_SUBSCRIPTION_ID: '$(Azure.SubscriptionId)'
+        ARM_TENANT_ID: '$(Azure.TenantId)'
+
   - job: ApplyTerraform
     displayName: Apply Terraform changes
+    dependsOn: ApplyTerraformPredeploy
+    condition: succeeded('ApplyTerraformPredeploy')
     steps:
     - script: terraform init
       workingDirectory: Terraform/Deploy
