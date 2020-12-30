@@ -96,6 +96,8 @@ stages:
         ARM_TENANT_ID: '$(Azure.TenantId)'
 
     - script: |
+        ip=$(curl ifconfig.me)
+        echo $ip
         terraform plan -out=tfplan_test -var 'image_tag=$(ImageTag)' -var 'image_registry_username=$(Azure.ClientId)' -var 'image_registry_password=$(Azure.ClientSecret)' -var 'db_server_admin_login=$(Azure.DbServer.AdminLogin)' -var 'db_server_admin_password=$(Azure.DbServer.AdminPassword)'
         terraform apply "tfplan_test"
         sql_server_fqdn=eval terraform output -raw sql_server_fqdn
@@ -118,7 +120,6 @@ stages:
     - script: |
         export PATH=$PATH:$HOME/.dotnet/tools
         . ~/.bashrc
-        echo $(SqlServerFqdn)
         dotnet ef database update -s ../LearningTerraform.Api
       workingDirectory: App/Src/LearningTerraform.DataAccess.MsSql
       displayName: Apply EF migrations
@@ -140,7 +141,7 @@ stages:
         ARM_TENANT_ID: '$(Azure.TenantId)'
 
     - script: |
-        terraform plan -out=tfplan_test -var 'image_tag=$(ImageTag)' -var 'image_registry_username=$(Azure.ClientId)' -var 'image_registry_password=$(Azure.ClientSecret)' -var 'db_server_admin_login=$(Azure.DbServer.AdminLogin)' -var 'db_server_admin_password=$(Azure.DbServer.AdminPassword)'
+        terraform plan -out=tfplan_test -var 'image_tag=$(ImageTag)' -var 'image_registry_username=$(Azure.ClientId)' -var 'image_registry_password=$(Azure.ClientSecret)' -var 'db_connection_string='
         terraform apply "tfplan_test"
       workingDirectory: Terraform/Deploy
       displayName: Terraform - Plan & Apply
