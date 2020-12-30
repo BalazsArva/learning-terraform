@@ -111,7 +111,7 @@ stages:
     - task: AzureCLI@2
       displayName: Allow agent through firewall
       inputs:
-        azureSubscription: AzureServiceConnection
+        azureSubscription: AzureResourceManagerServiceConnection
         scriptType: bash
         scriptLocation: inlineScript
         inlineScript: |
