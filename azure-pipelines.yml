@@ -96,8 +96,6 @@ stages:
         ARM_TENANT_ID: '$(Azure.TenantId)'
 
     - script: |
-        ip=$(curl ifconfig.me)
-        echo $ip
         terraform plan -out=tfplan_test -var 'image_tag=$(ImageTag)' -var 'image_registry_username=$(Azure.ClientId)' -var 'image_registry_password=$(Azure.ClientSecret)' -var 'db_server_admin_login=$(Azure.DbServer.AdminLogin)' -var 'db_server_admin_password=$(Azure.DbServer.AdminPassword)'
         terraform apply "tfplan_test"
         sql_server_fqdn=eval terraform output -raw sql_server_fqdn
@@ -109,6 +107,16 @@ stages:
         ARM_CLIENT_SECRET: '$(Azure.ClientSecret)'
         ARM_SUBSCRIPTION_ID: '$(Azure.SubscriptionId)'
         ARM_TENANT_ID: '$(Azure.TenantId)'
+
+    - task: AzureCLI@2
+      displayName: Allow agent through firewall
+      inputs:
+        azureSubscription: AzureServiceConnection
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          ip=$(curl ifconfig.me)
+          az sql server firewall-rule create --end-ip-address $ip --start-ip-address $ip --name 'pipeline-allow' --resource-group 'LearningTerraform' --server 'learning-terraform-db'
 
   - job: MigrateDatabase
     displayName: Migrate SQL database
