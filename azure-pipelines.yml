@@ -131,7 +131,6 @@ stages:
     - script: dotnet tool install --global --version 5.0.1 dotnet-ef
       displayName: Install EF tools
     - script: |
-        echo 'Using {}: ${{ SqlServerFqdn }}'
         echo 'Using []: $[  SqlServerFqdn ]'
         echo 'Using (): $(  SqlServerFqdn )'
       displayName: Display SqlServerFqdn
