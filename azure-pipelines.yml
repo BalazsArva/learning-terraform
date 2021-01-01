@@ -99,8 +99,9 @@ stages:
         terraform plan -out=tfplan_test -var 'image_tag=$(ImageTag)' -var 'image_registry_username=$(Azure.ClientId)' -var 'image_registry_password=$(Azure.ClientSecret)' -var 'db_server_admin_login=$(Azure.DbServer.AdminLogin)' -var 'db_server_admin_password=$(Azure.DbServer.AdminPassword)'
         terraform apply "tfplan_test"
         sql_server_fqdn=eval terraform output -raw sql_server_fqdn
-        echo "##vso[task.setvariable variable=SqlServerFqdn]$sql_server_fqdn"
+        echo "##vso[task.setvariable variable=SqlServerFqdn;isOutput=true]$sql_server_fqdn"
       workingDirectory: Terraform/Predeploy
+      name: PlanAndApply
       displayName: Terraform - Plan & Apply
       env:
         ARM_CLIENT_ID: '$(Azure.ClientId)'
@@ -112,6 +113,8 @@ stages:
     displayName: Migrate SQL database
     dependsOn: ApplyTerraformPredeploy
     condition: succeeded('ApplyTerraformPredeploy')
+    variables:
+      SqlServerFqdn: $[ dependencies.ApplyTerraformPredeploy.outputs['PlanAndApply.SqlServerFqdn'] ]
     steps:
     - task: AzureCLI@2
       displayName: Allow agent through firewall
@@ -126,7 +129,7 @@ stages:
       displayName: Install EF tools
     - template: Pipeline/Templates/Steps/wait-for-port.yml
       parameters:
-        host: $[ SqlServerFqdn ]
+        host: $(SqlServerFqdn)
         port: 1433
     - script: |
         export PATH=$PATH:$HOME/.dotnet/tools
