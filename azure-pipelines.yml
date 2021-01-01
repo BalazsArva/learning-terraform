@@ -108,6 +108,11 @@ stages:
         ARM_SUBSCRIPTION_ID: '$(Azure.SubscriptionId)'
         ARM_TENANT_ID: '$(Azure.TenantId)'
 
+  - job: MigrateDatabase
+    displayName: Migrate SQL database
+    dependsOn: ApplyTerraformPredeploy
+    condition: succeeded('ApplyTerraformPredeploy')
+    steps:
     - task: AzureCLI@2
       displayName: Allow agent through firewall
       inputs:
@@ -117,12 +122,6 @@ stages:
         inlineScript: |
           ip=$(curl ifconfig.me)
           az sql server firewall-rule create --end-ip-address $ip --start-ip-address $ip --name 'pipeline-allow' --resource-group 'LearningTerraform' --server 'learning-terraform-db'
-
-  - job: MigrateDatabase
-    displayName: Migrate SQL database
-    dependsOn: ApplyTerraformPredeploy
-    condition: succeeded('ApplyTerraformPredeploy')
-    steps:
     - script: dotnet tool install --global --version 5.0.1 dotnet-ef
       displayName: Install EF tools
     - template: Pipeline/Templates/Steps/wait-for-port.yml
