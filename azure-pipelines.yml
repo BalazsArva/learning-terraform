@@ -104,7 +104,6 @@ stages:
         sql_server_fqdn=eval terraform output -raw sql_server_fqdn
         echo "##vso[task.setvariable variable=SqlServerFqdn;isOutput=true]$sql_server_fqdn"
       workingDirectory: Terraform/Predeploy
-      name: PlanAndApply
       displayName: Terraform - Plan & Apply
       env:
         ARM_CLIENT_ID: '$(Azure.ClientId)'
@@ -117,7 +116,7 @@ stages:
     dependsOn: ApplyTerraformPredeploy
     condition: succeeded('ApplyTerraformPredeploy')
     variables:
-      SqlServerFqdn: $[ dependencies.ApplyTerraformPredeploy.outputs['PlanAndApply.SqlServerFqdn'] ]
+      SqlServerFqdn: $[ dependencies.ApplyTerraformPredeploy.outputs['SqlServerFqdn'] ]
     steps:
     - task: AzureCLI@2
       displayName: Allow agent through firewall
