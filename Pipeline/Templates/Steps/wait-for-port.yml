@@ -12,7 +12,7 @@ parameters:
     default: https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
   - name: scriptDestinationFolder
     type: string
-    default: ~/utils
+    default: $(Pipeline.Workspace)/custom-utilities
   - name: scriptDestinationFile
     type: string
     default: wait-for-it.sh
