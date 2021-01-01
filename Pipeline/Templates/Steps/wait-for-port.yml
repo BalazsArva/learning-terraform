@@ -1,0 +1,26 @@
+parameters:
+  - name: host
+    type: string
+  - name: port
+    type: string
+  - name: timeout
+    type: string
+    default: 180
+    displayName: Timeout in seconds
+
+variables:
+  - name: scriptSourceUri
+    readonly: true
+    value: https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
+  - name: scriptDestinationFolder
+    readonly: true
+    value: ~/utils
+  - name: scriptDestinationFile
+    readonly: true
+    value: wait-for-it.sh
+
+steps:
+  - script: |
+      ls $(scriptDestinationFolder) | grep $(scriptDestinationFile) || wget scriptSourceUri -O $(scriptDestinationFolder)/$(scriptDestinationFile)
+      chmod +rx $(scriptDestinationFolder)/$(scriptDestinationFile)
+      $(scriptDestinationFolder)/$(scriptDestinationFile) -h $(host) -p $(port) -t $(timeout)
