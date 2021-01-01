@@ -2,6 +2,7 @@ data "azurerm_container_registry" "acr" {
   name                = "exampleapp"
   resource_group_name = "LearningTerraform"
 }
+
 resource "azurerm_container_group" "app" {
   name                = local.api_container_group_name
   location            = local.location
@@ -28,6 +29,10 @@ resource "azurerm_container_group" "app" {
 
     environment_variables = {
       "ASPNETCORE_URLS" = "http://+:80"
+    }
+
+    secure_environment_variables = {
+      "ASPNETCORE_ConnectionStrings__Default" = var.db_connection_string
     }
   }
 
