@@ -30,5 +30,5 @@ steps:
       mkdir -p ${{ parameters.scriptDestinationFolder }}
       ls ${{ parameters.scriptDestinationFolder }} | grep ${{ parameters.scriptDestinationFile }} || wget ${{ parameters.scriptSourceUri }} -O $fullPath
       chmod +rx $fullPath
-      bash $fullPath -h ${{ parameters.host }} -p ${{ parameters.port }} -t ${{ parameters.timeout }}
+      $fullPath -h ${{ parameters.host }} -p ${{ parameters.port }} -t ${{ parameters.timeout }}
     displayName: Wait for port availability
