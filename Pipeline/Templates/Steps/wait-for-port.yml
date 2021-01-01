@@ -19,9 +19,13 @@ parameters:
 
 steps:
   - script: |
-      fullPath=$[ parameters.scriptDestinationFolder ]/$[ parameters.scriptDestinationFile ]
-      mkdir -p $[ parameters.scriptDestinationFolder ]
-      ls $[ parameters.scriptDestinationFolder ] | grep $[ parameters.scriptDestinationFile ] || wget $[ parameters.scriptSourceUri ] -O $fullPath
+      echo $(  parameters.host )
+      echo $[  parameters.host ]
+      echo ${{ parameters.host }}
+  - script: |
+      fullPath=${{ parameters.scriptDestinationFolder }}/${{ parameters.scriptDestinationFile }}
+      mkdir -p ${{ parameters.scriptDestinationFolder }}
+      ls ${{ parameters.scriptDestinationFolder }} | grep ${{ parameters.scriptDestinationFile }} || wget ${{ parameters.scriptSourceUri }} -O $fullPath
       chmod +rx $fullPath
-      bash $fullPath -h $[ parameters.host ] -p $[ parameters.port ] -t $[ parameters.timeout ]
+      bash $fullPath -h ${{ parameters.host }} -p ${{ parameters.port }} -t ${{ parameters.timeout }}
     displayName: Wait for port availability
