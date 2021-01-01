@@ -10,6 +10,7 @@ parameters:
   - name: scriptSourceUri
     type: string
     default: https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
+  -
   - name: scriptDestinationFolder
     type: string
     default: ~/utils
@@ -19,6 +20,7 @@ parameters:
 
 steps:
   - script: |
+      mkdir -p $(scriptDestinationFolder)
       ls $(scriptDestinationFolder) | grep $(scriptDestinationFile) || wget scriptSourceUri -O $(scriptDestinationFolder)/$(scriptDestinationFile)
       chmod +rx $(scriptDestinationFolder)/$(scriptDestinationFile)
       $(scriptDestinationFolder)/$(scriptDestinationFile) -h $(host) -p $(port) -t $(timeout)
