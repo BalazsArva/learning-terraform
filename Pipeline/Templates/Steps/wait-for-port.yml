@@ -7,17 +7,15 @@ parameters:
     type: string
     default: 180
     displayName: Timeout in seconds
-
-variables:
   - name: scriptSourceUri
-    readonly: true
-    value: https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
+    type: string
+    default: https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
   - name: scriptDestinationFolder
-    readonly: true
-    value: ~/utils
+    type: string
+    default: ~/utils
   - name: scriptDestinationFile
-    readonly: true
-    value: wait-for-it.sh
+    type: string
+    default: wait-for-it.sh
 
 steps:
   - script: |
