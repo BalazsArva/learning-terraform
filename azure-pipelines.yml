@@ -21,6 +21,8 @@ trigger:
 stages:
 - stage: CreateDockerImage
   displayName: Create Docker image
+  # TODO: Remove later
+  condition: false
   jobs:
   - job: ApplyTerraform
     displayName: Apply core Terraform changes
@@ -80,8 +82,9 @@ stages:
 
 - stage: DeployTest
   displayName: Deploy to Test
-  dependsOn: CreateDockerImage
-  condition: succeeded('CreateDockerImage')
+  #dependsOn: CreateDockerImage
+  #condition: succeeded('CreateDockerImage')
+  condition: true
   jobs:
   - job: ApplyTerraformPredeploy
     displayName: Apply pre-deployment Terraform changes
