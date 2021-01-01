@@ -19,12 +19,12 @@ parameters:
 
 steps:
   - script: |
-      echo $(  parameters.host )
-      echo $[  parameters.host ]
-      echo ${{ parameters.host }}
-      echo $(  parameters.port )
-      echo $[  parameters.port ]
-      echo ${{ parameters.port }}
+      echo 'host with ():   $(  parameters.host )'
+      echo 'host with []:   $[  parameters.host ]'
+      echo 'host with {{}}: ${{ parameters.host }}'
+      echo 'port with ():   $(  parameters.port )'
+      echo 'port with []:   $[  parameters.port ]'
+      echo 'port with {{}}: ${{ parameters.port }}'
   - script: |
       fullPath=${{ parameters.scriptDestinationFolder }}/${{ parameters.scriptDestinationFile }}
       mkdir -p ${{ parameters.scriptDestinationFolder }}
