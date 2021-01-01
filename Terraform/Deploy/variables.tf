@@ -25,12 +25,21 @@ variable "image_registry_password" {
   }
 }
 
-variable "db_connection_string" {
+variable "db_server_admin_login" {
   type = string
 
   validation {
-    condition = length(var.db_connection_string) > 0
-    error_message = "Database connection string is mandatory."
+    condition = length(var.db_server_admin_login) > 0
+    error_message = "DB server admin login is mandatory."
+  }
+}
+
+variable "db_server_admin_password" {
+  type = string
+
+  validation {
+    condition = length(var.db_server_admin_password) > 0
+    error_message = "DB server admin password is mandatory."
   }
 }
 

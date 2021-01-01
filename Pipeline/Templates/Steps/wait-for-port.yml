@@ -19,8 +19,8 @@ parameters:
 
 steps:
   - script: |
-      mkdir -p $(parameters.scriptDestinationFolder)
-      ls $(parameters.scriptDestinationFolder) | grep $(parameters.scriptDestinationFile) || wget $(parameters.scriptSourceUri) -O $(parameters.scriptDestinationFolder)/$(parameters.scriptDestinationFile)
-      chmod +rx $(parameters.scriptDestinationFolder)/$(parameters.scriptDestinationFile)
-      bash $(parameters.scriptDestinationFolder)/$(parameters.scriptDestinationFile) -h $(parameters.host) -p $(parameters.port) -t $(parameters.timeout)
+      mkdir -p $(scriptDestinationFolder)
+      ls $(scriptDestinationFolder) | grep $(scriptDestinationFile) || wget scriptSourceUri -O $(scriptDestinationFolder)/$(scriptDestinationFile)
+      chmod +rx $(scriptDestinationFolder)/$(scriptDestinationFile)
+      bash $(scriptDestinationFolder)/$(scriptDestinationFile) -h $(host) -p $(port) -t $(timeout)
     displayName: Wait for port availability
