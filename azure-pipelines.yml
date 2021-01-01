@@ -126,7 +126,6 @@ stages:
     - script: dotnet tool install --global --version 5.0.1 dotnet-ef
       displayName: Install EF tools
     - template: Pipeline/Templates/Steps/wait-for-port.yml
-      displayName: Wait for SQL Database
       parameters:
         host: $(SqlServerFqdn)
         port: 1433

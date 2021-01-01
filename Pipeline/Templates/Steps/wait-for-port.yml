@@ -2,15 +2,14 @@ parameters:
   - name: host
     type: string
   - name: port
-    type: string
+    type: number
   - name: timeout
-    type: string
+    type: number
     default: 180
     displayName: Timeout in seconds
   - name: scriptSourceUri
     type: string
     default: https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
-  -
   - name: scriptDestinationFolder
     type: string
     default: ~/utils
@@ -24,3 +23,4 @@ steps:
       ls $(scriptDestinationFolder) | grep $(scriptDestinationFile) || wget scriptSourceUri -O $(scriptDestinationFolder)/$(scriptDestinationFile)
       chmod +rx $(scriptDestinationFolder)/$(scriptDestinationFile)
       $(scriptDestinationFolder)/$(scriptDestinationFile) -h $(host) -p $(port) -t $(timeout)
+    displayName: Wait for port availability
