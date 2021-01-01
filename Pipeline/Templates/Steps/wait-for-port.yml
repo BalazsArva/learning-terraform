@@ -22,6 +22,9 @@ steps:
       echo $(  parameters.host )
       echo $[  parameters.host ]
       echo ${{ parameters.host }}
+      echo $(  parameters.port )
+      echo $[  parameters.port ]
+      echo ${{ parameters.port }}
   - script: |
       fullPath=${{ parameters.scriptDestinationFolder }}/${{ parameters.scriptDestinationFile }}
       mkdir -p ${{ parameters.scriptDestinationFolder }}

@@ -126,7 +126,7 @@ stages:
       displayName: Install EF tools
     - template: Pipeline/Templates/Steps/wait-for-port.yml
       parameters:
-        host: $(SqlServerFqdn)
+        host: $[ SqlServerFqdn ]
         port: 1433
     - script: |
         export PATH=$PATH:$HOME/.dotnet/tools
