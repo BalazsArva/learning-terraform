@@ -6,9 +6,9 @@ variables:
   - name: ImageTag
     readonly: true
     value: $(Build.BuildId)
-  - name: IsMaster
+  - name: FirewallRuleName
     readonly: true
-    value: $[ eq(variables['Build.SourceBranch'], 'refs/heads/master') ]
+    value: 'pipeline-allow'
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -118,13 +118,14 @@ stages:
     steps:
     - task: AzureCLI@2
       displayName: Allow agent through firewall
+      name: createAgentFirewallRule
       inputs:
         azureSubscription: AzureResourceManagerServiceConnection
         scriptType: bash
         scriptLocation: inlineScript
         inlineScript: |
           ip=$(curl ifconfig.me)
-          az sql server firewall-rule create --end-ip-address $ip --start-ip-address $ip --name 'pipeline-allow' --resource-group 'LearningTerraform' --server 'learning-terraform-db'
+          az sql server firewall-rule create --end-ip-address $ip --start-ip-address $ip --name $(FirewallRuleName) --resource-group 'LearningTerraform' --server 'learning-terraform-db'
     - script: dotnet tool install --global --version 5.0.1 dotnet-ef
       displayName: Install EF tools
     - template: Pipeline/Templates/Steps/wait-for-port.yml
@@ -139,6 +140,15 @@ stages:
       displayName: Apply EF migrations
       env:
         ConnectionStrings__Default: 'Server=tcp:$(SqlServerFqdn),1433;Initial Catalog=learning-terraform-db;Persist Security Info=False;User ID=$(Azure.DbServer.AdminLogin);Password=$(Azure.DbServer.AdminPassword);MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+    - task: AzureCLI@2
+      displayName: Remove agent firewall rule
+      condition: succeeded('createAgentFirewallRule')
+      inputs:
+        azureSubscription: AzureResourceManagerServiceConnection
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          az sql server firewall-rule delete --resource-group 'LearningTerraform' --server 'learning-terraform-db' --name $(FirewallRuleName)
 
   - job: ApplyTerraform
     displayName: Apply Terraform changes
