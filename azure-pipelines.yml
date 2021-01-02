@@ -118,7 +118,7 @@ stages:
     dependsOn: ApplyTerraformPredeploy
     condition: succeeded('ApplyTerraformPredeploy')
     variables:
-      SqlServerFqdn: $[ dependencies.ApplyTerraformPredeploy.outputs['ApplyTerraformPredeploy.TerraformPlanAndApply.SqlServerFqdn'] ]
+      SqlServerFqdn: $[ dependencies.ApplyTerraformPredeploy.outputs['TerraformPlanAndApply.SqlServerFqdn'] ]
     steps:
     - task: AzureCLI@2
       displayName: Allow agent through firewall
