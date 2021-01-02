@@ -9,6 +9,9 @@ variables:
   - name: FirewallRuleName
     readonly: true
     value: 'pipeline-allow'
+  - name: ResourceGroup
+    readonly: true
+    value: 'LearningTerraform'
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -125,7 +128,7 @@ stages:
         scriptLocation: inlineScript
         inlineScript: |
           ip=$(curl ifconfig.me)
-          az sql server firewall-rule create --end-ip-address $ip --start-ip-address $ip --name $(FirewallRuleName) --resource-group 'LearningTerraform' --server 'learning-terraform-db'
+          az sql server firewall-rule create --end-ip-address $ip --start-ip-address $ip --name $(FirewallRuleName) --resource-group $(ResourceGroup) --server 'learning-terraform-db'
     - script: dotnet tool install --global --version 5.0.1 dotnet-ef
       displayName: Install EF tools
     - template: Pipeline/Templates/Steps/wait-for-port.yml
@@ -148,7 +151,7 @@ stages:
         scriptType: bash
         scriptLocation: inlineScript
         inlineScript: |
-          az sql server firewall-rule delete --resource-group 'LearningTerraform' --server 'learning-terraform-db' --name $(FirewallRuleName)
+          az sql server firewall-rule delete --resource-group $(ResourceGroup) --server 'learning-terraform-db' --name $(FirewallRuleName)
 
   - job: ApplyTerraform
     displayName: Apply Terraform changes
