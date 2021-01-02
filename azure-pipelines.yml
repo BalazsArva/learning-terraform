@@ -138,6 +138,7 @@ stages:
     - script: |
         export PATH=$PATH:$HOME/.dotnet/tools
         . ~/.bashrc
+        echo 'Server=tcp:$(SqlServerFqdn),1433;Initial Catalog=learning-terraform-db;Persist Security Info=False;User ID=$(Azure.DbServer.AdminLogin);Password=$(Azure.DbServer.AdminPassword);MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
         dotnet ef database update -s ../LearningTerraform.Api
       workingDirectory: App/Src/LearningTerraform.DataAccess.MsSql
       displayName: Apply EF migrations
