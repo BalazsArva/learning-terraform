@@ -101,7 +101,7 @@ stages:
     - script: |
         terraform plan -out=tfplan_test -var 'image_tag=$(ImageTag)' -var 'image_registry_username=$(Azure.ClientId)' -var 'image_registry_password=$(Azure.ClientSecret)' -var 'db_server_admin_login=$(Azure.DbServer.AdminLogin)' -var 'db_server_admin_password=$(Azure.DbServer.AdminPassword)'
         terraform apply "tfplan_test"
-        sql_server_fqdn=`terraform output sql_server_fqdn`
+        sql_server_fqdn=`terraform output -raw sql_server_fqdn`
         echo $sql_server_fqdn
         echo "##vso[task.setvariable variable=SqlServerFqdn;isOutput=true]$sql_server_fqdn"
       workingDirectory: Terraform/Predeploy
