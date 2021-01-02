@@ -19,13 +19,6 @@ parameters:
 
 steps:
   - script: |
-      echo 'host with ():   $(  parameters.host )'
-      echo 'host with []:   $[  parameters.host ]'
-      echo 'host with {{}}: ${{ parameters.host }}'
-      echo 'port with ():   $(  parameters.port )'
-      echo 'port with []:   $[  parameters.port ]'
-      echo 'port with {{}}: ${{ parameters.port }}'
-  - script: |
       fullPath=${{ parameters.scriptDestinationFolder }}/${{ parameters.scriptDestinationFile }}
       mkdir -p ${{ parameters.scriptDestinationFolder }}
       ls ${{ parameters.scriptDestinationFolder }} | grep ${{ parameters.scriptDestinationFile }} || wget ${{ parameters.scriptSourceUri }} -O $fullPath
