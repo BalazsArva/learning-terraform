@@ -6,9 +6,12 @@ variables:
   - name: ImageTag
     readonly: true
     value: $(Build.BuildId)
-  - name: IsMaster
+  - name: FirewallRuleName
     readonly: true
-    value: $[ eq(variables['Build.SourceBranch'], 'refs/heads/master') ]
+    value: 'pipeline-allow'
+  - name: ResourceGroup
+    readonly: true
+    value: 'LearningTerraform'
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -23,10 +26,10 @@ stages:
   displayName: Create Docker image
   jobs:
   - job: ApplyTerraform
-    displayName: Apply pre-deployment Terraform changes
+    displayName: Apply core Terraform changes
     steps:
     - script: terraform init
-      workingDirectory: Terraform/Predeploy
+      workingDirectory: Terraform/Core
       displayName: Terraform - Initialize
       env:
         ARM_CLIENT_ID: '$(Azure.ClientId)'
@@ -37,7 +40,7 @@ stages:
     - script: |
         terraform plan -out=tfplan
         terraform apply "tfplan"
-      workingDirectory: Terraform/Predeploy
+      workingDirectory: Terraform/Core
       displayName: Terraform - Plan & Apply
       env:
         ARM_CLIENT_ID: '$(Azure.ClientId)'
@@ -83,8 +86,77 @@ stages:
   dependsOn: CreateDockerImage
   condition: succeeded('CreateDockerImage')
   jobs:
+  - job: ApplyTerraformPredeploy
+    displayName: Apply pre-deployment Terraform changes
+    steps:
+    - script: terraform init
+      workingDirectory: Terraform/Predeploy
+      displayName: 'Terraform - Initialize'
+      env:
+        ARM_CLIENT_ID: '$(Azure.ClientId)'
+        ARM_CLIENT_SECRET: '$(Azure.ClientSecret)'
+        ARM_SUBSCRIPTION_ID: '$(Azure.SubscriptionId)'
+        ARM_TENANT_ID: '$(Azure.TenantId)'
+
+    - script: |
+        terraform plan -out=tfplan_test -var 'image_tag=$(ImageTag)' -var 'image_registry_username=$(Azure.ClientId)' -var 'image_registry_password=$(Azure.ClientSecret)' -var 'db_server_admin_login=$(Azure.DbServer.AdminLogin)' -var 'db_server_admin_password=$(Azure.DbServer.AdminPassword)'
+        terraform apply "tfplan_test"
+        sql_server_fqdn=`terraform output -json sql_server_fqdn | jq -r .`
+        echo "##vso[task.setvariable variable=SqlServerFqdn;isOutput=true]$sql_server_fqdn"
+      workingDirectory: Terraform/Predeploy
+      displayName: Terraform - Plan & Apply
+      name: TerraformPlanAndApply
+      env:
+        ARM_CLIENT_ID: '$(Azure.ClientId)'
+        ARM_CLIENT_SECRET: '$(Azure.ClientSecret)'
+        ARM_SUBSCRIPTION_ID: '$(Azure.SubscriptionId)'
+        ARM_TENANT_ID: '$(Azure.TenantId)'
+
+  - job: MigrateDatabase
+    displayName: Migrate SQL database
+    dependsOn: ApplyTerraformPredeploy
+    condition: succeeded('ApplyTerraformPredeploy')
+    variables:
+      SqlServerFqdn: $[ dependencies.ApplyTerraformPredeploy.outputs['TerraformPlanAndApply.SqlServerFqdn'] ]
+    steps:
+    - task: AzureCLI@2
+      displayName: Allow agent through firewall
+      name: createAgentFirewallRule
+      inputs:
+        azureSubscription: AzureResourceManagerServiceConnection
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          ip=$(curl ifconfig.me)
+          az sql server firewall-rule create --end-ip-address $ip --start-ip-address $ip --name $(FirewallRuleName) --resource-group $(ResourceGroup) --server 'learning-terraform-db'
+    - script: dotnet tool install --global --version 5.0.1 dotnet-ef
+      displayName: Install EF tools
+    - template: Pipeline/Templates/Steps/wait-for-port.yml
+      parameters:
+        host: $(SqlServerFqdn)
+        port: 1433
+    - script: |
+        export PATH=$PATH:$HOME/.dotnet/tools
+        . ~/.bashrc
+        dotnet ef database update -s ../LearningTerraform.Api
+      workingDirectory: App/Src/LearningTerraform.DataAccess.MsSql
+      displayName: Apply EF migrations
+      env:
+        ConnectionStrings__Default: 'Server=tcp:$(SqlServerFqdn),1433;Initial Catalog=learning-terraform-db;Persist Security Info=False;User ID=$(Azure.DbServer.AdminLogin);Password=$(Azure.DbServer.AdminPassword);MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+    - task: AzureCLI@2
+      displayName: Remove agent firewall rule
+      condition: succeeded('createAgentFirewallRule')
+      inputs:
+        azureSubscription: AzureResourceManagerServiceConnection
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          az sql server firewall-rule delete --resource-group $(ResourceGroup) --server 'learning-terraform-db' --name $(FirewallRuleName)
+
   - job: ApplyTerraform
     displayName: Apply Terraform changes
+    dependsOn: MigrateDatabase
+    condition: succeeded('MigrateDatabase')
     steps:
     - script: terraform init
       workingDirectory: Terraform/Deploy
@@ -96,7 +168,7 @@ stages:
         ARM_TENANT_ID: '$(Azure.TenantId)'
 
     - script: |
-        terraform plan -out=tfplan_test -var 'image_tag=$(ImageTag)' -var 'image_registry_username=$(Azure.ClientId)' -var 'image_registry_password=$(Azure.ClientSecret)' -var 'db_server_admin_login=$(Azure.DbServer.AdminLogin)' -var 'db_server_admin_password=$(Azure.DbServer.AdminPassword)'
+        terraform plan -out=tfplan_test -var 'image_tag=$(ImageTag)' -var 'image_registry_username=$(Azure.ClientId)' -var 'image_registry_password=$(Azure.ClientSecret)' -var 'db_connection_string='
         terraform apply "tfplan_test"
       workingDirectory: Terraform/Deploy
       displayName: Terraform - Plan & Apply

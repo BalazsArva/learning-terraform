@@ -1,0 +1,27 @@
+parameters:
+  - name: host
+    type: string
+  - name: port
+    type: number
+  - name: timeout
+    type: number
+    default: 180
+    displayName: Timeout in seconds
+  - name: scriptSourceUri
+    type: string
+    default: https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
+  - name: scriptDestinationFolder
+    type: string
+    default: $(Pipeline.Workspace)/custom-utilities
+  - name: scriptDestinationFile
+    type: string
+    default: wait-for-it.sh
+
+steps:
+  - script: |
+      fullPath=${{ parameters.scriptDestinationFolder }}/${{ parameters.scriptDestinationFile }}
+      mkdir -p ${{ parameters.scriptDestinationFolder }}
+      ls ${{ parameters.scriptDestinationFolder }} | grep ${{ parameters.scriptDestinationFile }} || wget ${{ parameters.scriptSourceUri }} -O $fullPath
+      chmod +rx $fullPath
+      $fullPath -h ${{ parameters.host }} -p ${{ parameters.port }} -t ${{ parameters.timeout }}
+    displayName: Wait for port availability
