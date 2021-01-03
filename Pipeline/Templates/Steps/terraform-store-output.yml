@@ -11,6 +11,9 @@ parameters:
   - name: stepName
     type: string
     displayName: Name of the step to reference the variable
+  - name: azureSubscriptionId
+    type: string
+    displayName: Subscription ID for Azure
 
 steps:
   - script: |
@@ -19,3 +22,5 @@ steps:
     workingDirectory: ${{ parameters.workingDirectory }}
     displayName: Terraform - Store output ${{ parameters.outputSource }}
     name: ${{ parameters.stepName }}
+    env:
+      ARM_SUBSCRIPTION_ID: ${{ parameters.azureSubscriptionId }}

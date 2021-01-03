@@ -101,6 +101,7 @@ stages:
         planArgs: -var 'image_tag=$(ImageTag)' -var 'image_registry_username=$(Azure.ClientId)' -var 'image_registry_password=$(Azure.ClientSecret)' -var 'db_server_admin_login=$(Azure.DbServer.AdminLogin)' -var 'db_server_admin_password=$(Azure.DbServer.AdminPassword)'
     - template: Pipeline/Templates/Steps/terraform-store-output.yml
       parameters:
+        azureSubscriptionId: $(Azure.SubscriptionId)
         workingDirectory: $(predeployWorkingDirectory)
         outputSource: sql_server_fqdn
         targetVariable: sqlServerFqdn
