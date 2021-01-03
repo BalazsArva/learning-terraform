@@ -1,0 +1,21 @@
+parameters:
+  - name: workingDirectory
+    type: string
+    displayName: Working directory for Terraform
+  - name: outputSource
+    type: string
+    displayName: Arguments for plan command
+  - name: targetVariable
+    type: string
+    displayName: Name of the target variable
+  - name: stepName
+    type: string
+    displayName: Name of the step to reference the variable
+
+steps:
+  - script: |
+      result=`terraform output -json ${{ parameters.outputSource }} | jq -r .`
+      echo "##vso[task.setvariable variable=${{ parameters.targetVariable }};isOutput=true]$result"
+    workingDirectory: ${{ parameters.workingDirectory }}
+    displayName: Terraform - Store output ${{ parameters.outputSource }}
+    name: ${{ parameters.stepName }}

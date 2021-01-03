@@ -88,36 +88,30 @@ stages:
   jobs:
   - job: ApplyTerraformPredeploy
     displayName: Apply pre-deployment Terraform changes
+    variables:
+      predeployWorkingDirectory: Terraform/Predeploy
     steps:
-    - script: terraform init
-      workingDirectory: Terraform/Predeploy
-      displayName: 'Terraform - Initialize'
-      env:
-        ARM_CLIENT_ID: '$(Azure.ClientId)'
-        ARM_CLIENT_SECRET: '$(Azure.ClientSecret)'
-        ARM_SUBSCRIPTION_ID: '$(Azure.SubscriptionId)'
-        ARM_TENANT_ID: '$(Azure.TenantId)'
-
-    - script: |
-        terraform plan -out=tfplan_test -var 'image_tag=$(ImageTag)' -var 'image_registry_username=$(Azure.ClientId)' -var 'image_registry_password=$(Azure.ClientSecret)' -var 'db_server_admin_login=$(Azure.DbServer.AdminLogin)' -var 'db_server_admin_password=$(Azure.DbServer.AdminPassword)'
-        terraform apply "tfplan_test"
-        sql_server_fqdn=`terraform output -json sql_server_fqdn | jq -r .`
-        echo "##vso[task.setvariable variable=SqlServerFqdn;isOutput=true]$sql_server_fqdn"
-      workingDirectory: Terraform/Predeploy
-      displayName: Terraform - Plan & Apply
-      name: TerraformPlanAndApply
-      env:
-        ARM_CLIENT_ID: '$(Azure.ClientId)'
-        ARM_CLIENT_SECRET: '$(Azure.ClientSecret)'
-        ARM_SUBSCRIPTION_ID: '$(Azure.SubscriptionId)'
-        ARM_TENANT_ID: '$(Azure.TenantId)'
+    - template: Pipeline/Templates/Steps/terraform-plan-and-apply.yml
+      parameters:
+        azureClientId: $(Azure.ClientId)
+        azureClientSecret: $(Azure.ClientSecret)
+        azureSubscriptionId: $(Azure.SubscriptionId)
+        azureTenantId: $(Azure.TenantId)
+        workingDirectory: $(predeployWorkingDirectory)
+        planArgs: -var 'image_tag=$(ImageTag)' -var 'image_registry_username=$(Azure.ClientId)' -var 'image_registry_password=$(Azure.ClientSecret)' -var 'db_server_admin_login=$(Azure.DbServer.AdminLogin)' -var 'db_server_admin_password=$(Azure.DbServer.AdminPassword)'
+    - template: Pipeline/Templates/Steps/terraform-store-output.yml
+      parameters:
+        workingDirectory: $(predeployWorkingDirectory)
+        outputSource: sql_server_fqdn
+        targetVariable: sqlServerFqdn
+        stepName: getSqlServerFqdn
 
   - job: MigrateDatabase
     displayName: Migrate SQL database
     dependsOn: ApplyTerraformPredeploy
     condition: succeeded('ApplyTerraformPredeploy')
     variables:
-      SqlServerFqdn: $[ dependencies.ApplyTerraformPredeploy.outputs['TerraformPlanAndApply.SqlServerFqdn'] ]
+      sqlServerFqdn: $[ dependencies.ApplyTerraformPredeploy.outputs['getSqlServerFqdn.sqlServerFqdn'] ]
     steps:
     - task: AzureCLI@2
       displayName: Allow agent through firewall
@@ -133,7 +127,7 @@ stages:
       displayName: Install EF tools
     - template: Pipeline/Templates/Steps/wait-for-port.yml
       parameters:
-        host: $(SqlServerFqdn)
+        host: $(sqlServerFqdn)
         port: 1433
     - script: |
         export PATH=$PATH:$HOME/.dotnet/tools

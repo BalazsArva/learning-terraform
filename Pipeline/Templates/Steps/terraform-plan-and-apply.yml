@@ -1,0 +1,41 @@
+parameters:
+  - name: workingDirectory
+    type: string
+    displayName: Working directory for Terraform
+  - name: planArgs
+    type: string
+    displayName: Arguments for plan command
+  - name: azureClientId
+    type: string
+    displayName: Client ID for Azure
+  - name: azureClientSecret
+    type: string
+    displayName: Client secret for Azure
+  - name: azureSubscriptionId
+    type: string
+    displayName: Subscription ID for Azure
+  - name: azureTenantId
+    type: string
+    displayName: Tenant ID for Azure
+
+steps:
+  - script: terraform init
+    workingDirectory: ${{ parameters.workingDirectory }}
+    displayName: Terraform - Initialize
+    env:
+      ARM_CLIENT_ID: ${{ parameters.azureClientId }}
+      ARM_CLIENT_SECRET: ${{ parameters.azureClientSecret }}
+      ARM_SUBSCRIPTION_ID: ${{ parameters.azureSubscriptionId }}
+      ARM_TENANT_ID: ${{ parameters.azureTenantId }}
+  - script: |
+      planfile="tfplan_$(date +%s)"
+      terraform plan -out=$planfile ${{ parameters.planArgs }}
+      terraform apply "$planfile"
+    workingDirectory: ${{ parameters.workingDirectory }}
+    displayName: Terraform - Plan & Apply
+    name: TerraformPlanAndApply
+    env:
+      ARM_CLIENT_ID: ${{ parameters.azureClientId }}
+      ARM_CLIENT_SECRET: ${{ parameters.azureClientSecret }}
+      ARM_SUBSCRIPTION_ID: ${{ parameters.azureSubscriptionId }}
+      ARM_TENANT_ID: ${{ parameters.azureTenantId }}
