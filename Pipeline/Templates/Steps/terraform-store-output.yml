@@ -11,9 +11,18 @@ parameters:
   - name: stepName
     type: string
     displayName: Name of the step to reference the variable
+  - name: azureClientId
+    type: string
+    displayName: Client ID for Azure
+  - name: azureClientSecret
+    type: string
+    displayName: Client secret for Azure
   - name: azureSubscriptionId
     type: string
     displayName: Subscription ID for Azure
+  - name: azureTenantId
+    type: string
+    displayName: Tenant ID for Azure
 
 steps:
   - script: |
@@ -23,4 +32,7 @@ steps:
     displayName: Terraform - Store output ${{ parameters.outputSource }}
     name: ${{ parameters.stepName }}
     env:
+      ARM_CLIENT_ID: ${{ parameters.azureClientId }}
+      ARM_CLIENT_SECRET: ${{ parameters.azureClientSecret }}
       ARM_SUBSCRIPTION_ID: ${{ parameters.azureSubscriptionId }}
+      ARM_TENANT_ID: ${{ parameters.azureTenantId }}
